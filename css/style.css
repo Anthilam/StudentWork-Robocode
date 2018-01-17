@@ -1,0 +1,65 @@
+header {
+  font-family: 'Roboto',sans-serif;
+  font-weight: 700;
+}
+
+body {
+  font-family: 'Roboto',sans-serif;
+}
+
+.carousel img {
+  margin: auto;
+}
+
+#reglesDuJeu h3 {
+  font-weight: 700;
+}
+
+input {
+  display: none;
+}
+
+.txt {
+  display: none;
+}
+
+input:checked + .txt {
+  display: block;
+}
+
+#robotBleu {
+  width: max-width;
+  height: 100px;
+  overflow: hidden;
+}
+
+#robotBleu img {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#i1 {
+  height: 100px;
+}
+
+#i2 {
+  margin-left: -80px;
+  height: 60px;
+}
+
+.fullBody {
+    animation-name: monAnimation;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    animation-direction: normal;
+    animation-timing-function: linear;
+}
+
+@keyframes monAnimation {
+    0% {
+      margin-left: 0%;
+    }
+    100% {
+      margin-left: 100%;
+    }
+}

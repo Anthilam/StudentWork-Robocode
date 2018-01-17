@@ -1,0 +1,134 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="bootstrap/dist/js/bootstrap.js"></script>
+    <title>Robocode</title>
+  </head>
+
+  <header>
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar">Règles du jeu</span>
+            <span class="icon-bar">Actions</span>
+            <span class="icon-bar">Jouer</span>
+          </button>
+          <a class="navbar-brand" href="#">Robocode</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><a href="#"><span class="glyphicon glyphicon-list-alt"></span> Règles du jeu</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-wrench"></span> Actions</a></li>
+            <li><a href="#"><span class="glyphicon glyphicon-play"></span> Jouer</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav>
+  </header>
+
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+        <img src="images/logo.png" alt="logo">
+        <h2><strong>Le grand défi des robots</strong></h2>
+        <p id="test">Un jeu original pour 2 joueurs, sur mobile en ligne.</p>
+      </div>
+
+      <p>Robocode est un jeu dans lequel deux robots s'affrontent au tour par tour en aller chercher des drapeaux en vue de les poser dans la base adverse. Le premier robot à déposer deux drapeaux dans la base de l'adversaire gagne la partie.</p>
+
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+          <li data-target="#myCarousel" data-slide-to="3"></li>
+        </ol>
+
+        <div class="carousel-inner">
+          <div class="item active">
+            <img src="images/carousel1.jpg" alt="carousel1">
+          </div>
+
+          <div class="item">
+            <img src="images/carousel2.png" alt="carousel2">
+          </div>
+
+          <div class="item">
+            <img src="images/carousel3.png" alt="carousel3">
+          </div>
+
+          <div class="item">
+            <img src="images/carousel4.png" alt="carousel4">
+          </div>
+        </div>
+      </div>
+
+      <div id="reglesDuJeu">
+        <h3><span class="glyphicon glyphicon-list-alt"></span> Règles du jeu</h3>
+
+        <p>Robocode est un jeu de réflexion qui se joue à deux joueurs, au tour par tour. Chaque joueur contrôle un robot qu'il programme avec un jeu d'instructions très simple que le robot exécutera à chaque tour de jeu.</p>
+
+        <div>
+          <label for="input1">
+            <h4>
+              <span class="glyphicon glyphicon-triangle-right"></span>
+              Disposition du plateau de jeu et configuration initiale
+            </h4>
+          </label>
+          <input type="checkbox" id="input1">
+          <p class="txt">
+            Le plateau de jeu est un carré de 9 × 9 cases. Les bases des robots sont disposés sur 4 cases aux extrémités ouest (robot bleu) et est (robot rouge). Les drapeaux à ramasser sont disposés sur les côtés nord et sud du damier.
+            </br></br>Initialement, chaque robot débute sur une case aléatoire de sa base, orienté dans la direction de la base adverse. Quatre drapeaux sont disposés dans la zone au nord et quatre au sud, mélangés aléatoirement dans ces zones (mais avec 2 drapeaux rouges et 2 bleus dans chaque zone).
+            </br></br>Le robot rouge a la main. C'est lui qui commencera en premier l'exécution de son programme.
+          </p>
+        </div>
+
+        <div>
+          <label for="input2">
+            <h4>
+              <span class="glyphicon glyphicon-triangle-right"></span>
+              Tour de jeu
+            </h4>
+          </label>
+          <input type="checkbox" id="input2">
+          <p class="txt">
+            Au début du tour, chaque joueur choisit 5 cartes "code" qui vont composer les 5 instructions du programme qui sera exécuté par son robot. Quand les deux joueurs ont écrit et validé leur programme, ceux-ci sont exécutés.
+            </br></br>Les robots suivent leurs instructions une par une, à tour de rôle : le premier robot exécute sa première instruction, puis le second robot exécute sa première instruction, ensuite c'est au premier robot d'exécuter sa deuxième instruction, puis au second, et ainsi de suite, jusqu'à ce que les 5 instructions aient été exécutées. A la fin de chaque programme (série de 5 instructions), les joueurs sont invités à écrire leur prochain programme, et la main passe à l'autre robot qui exécutera ses instructions en premier.
+            </br></br>Si une action est impossible à réaliser, le robot ne bouge pas jusqu'à l'instruction suivante. Un robot ne peut pas aller sur une case déjà occupée par l'autre robot, ni sortir du plateau. Les robots ne portent qu'un seul drapeau à la fois.
+          </p>
+        </div>
+
+        <div>
+          <label for="input3">
+            <h4>
+              <span class="glyphicon glyphicon-triangle-right"></span>
+              Fin de la partie
+            </h4>
+          </label>
+          <input type="checkbox" id="input3">
+          <p class="txt">
+            La partie se termine lorsque l'un des deux joueurs a réussi à poser deux drapeaux dans sur la base adverse.
+            </br></br>Le perdant hérite d'un gage.
+          </p>
+        </div>
+
+        <div id="robotBleu">
+          <div class="fullBody">
+            <img id="i1" src="images/robot-chenilles.png" alt="robot-chenille">
+            <img id="i2" src="images/robot-corps-bleu.png" alt="robot-bleu">
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
