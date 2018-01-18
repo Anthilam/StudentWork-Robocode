@@ -1,17 +1,24 @@
-header {
-  font-family: 'Roboto',sans-serif;
-  font-weight: 700;
-}
-
 body {
   font-family: 'Roboto',sans-serif;
+}
+
+.navbar {
+  font-weight: 700;
+  position: fixed;
+  width: 100%;
+  z-index: 10000;
+  top: 0;
+}
+
+.container {
+  margin-top: 65px;
 }
 
 .carousel img {
   margin: auto;
 }
 
-#reglesDuJeu h3 {
+#reglesDuJeu h3, #actions h3, #jouer h3 {
   font-weight: 700;
 }
 
@@ -23,43 +30,72 @@ input {
   display: none;
 }
 
-input:checked + .txt {
+input:checked + div .txt {
   display: block;
 }
 
-#robotBleu {
-  width: max-width;
-  height: 100px;
-  overflow: hidden;
+input + div label h4 span {
+  transition: transform 0.5s;
 }
 
-#robotBleu img {
-  display: inline-block;
-  vertical-align: middle;
+input:checked + div label h4 span {
+  transform: rotate(90deg);
 }
 
-#i1 {
+#robotBleu, #robotRouge {
+  position: relative;
   height: 100px;
 }
 
-#i2 {
-  margin-left: -80px;
-  height: 60px;
+.i1 {
+  width: 60px;
 }
 
-.fullBody {
-    animation-name: monAnimation;
-    animation-duration: 5s;
-    animation-iteration-count: infinite;
-    animation-direction: normal;
-    animation-timing-function: linear;
+.i2 {
+  position: absolute;
+  left: -20px;
+  height: 50px;
+  width: 100px;
+  top: 20px;
 }
 
-@keyframes monAnimation {
+#robotBleu .fullBody {
+  position: absolute;
+  animation-name: anim_robot;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-direction: normal;
+  animation-timing-function: linear;
+}
+
+#robotRouge .fullBody {
+  position: absolute;
+  animation-name: anim_robot;
+  animation-duration: 8s;
+  animation-delay: -4s;
+  animation-iteration-count: infinite;
+  animation-direction: backwards;
+  animation-timing-function: linear;
+}
+
+@keyframes anim_robot {
     0% {
-      margin-left: 0%;
+      left: 5%;
+    }
+    45% {
+      left: 90%;
+      transform:rotate(0deg);
+    }
+    50% {
+      left: 90%;
+      transform: rotate(180deg);
+    }
+    95% {
+      left: 5%;
+      transform: rotate(180deg);
     }
     100% {
-      margin-left: 100%;
+      left: 5%;
+      transform: rotate(360deg);
     }
 }
