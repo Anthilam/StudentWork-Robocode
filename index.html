@@ -17,9 +17,6 @@
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Robocode</a>
         </div>
@@ -130,6 +127,84 @@
 
       <div id="actions">
         <h3><span class="glyphicon glyphicon-wrench"></span> Les actions/instructions possibles</h3>
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-1">
+              <img class="behind" src="images/nord-bleu.png" alt="nord-bleu.png">
+              <img class="infront" src="images/nord-rouge.png" alt="nord-rouge.png">
+            </div>
+            <div class="col-md-5">
+              <h3>Nord, Sud, Est, Ouest</h3>
+              Le robot se tourne dans la direction indiquée et avance d'une case. Il n'est pas possible d'avancer sur une case déjà occupée par l'autre robot.
+            </div>
+            <div class="col-md-1">
+              <img class="behind" src="images/est-x2-rouge.png" alt="est-x2-rouge.png">
+              <img class="infront" src="images/ouest-x2-bleu.png" alt="ouest-x2-bleu.png">
+            </div>
+            <div class="col-md-5">
+              <h3>Est ×2 - Ouest ×2</h3>
+              Le robot avance de deux cases dans vers l'ouest (robot bleu) ou vers l'est (robot rouge).
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-1">
+              <img class="behind" src="images/prendre-rouge.png" alt="prendre-rouge.png">
+              <img class="infront" src="images/prendre-bleu.png" alt="prendre-bleu.png">
+            </div>
+            <div class="col-md-5">
+              <h3>Prendre</h3>
+              Le robot prend le drapeau qui est sur la case où il se trouve. Le robot ne peut prendre qu'un drapeau à la fois.
+            </div>
+            <div class="col-md-1">
+              <img class="behind" src="images/deposer-bleu.png" alt="deposer-bleu.png">
+              <img class="infront" src="images/deposer-rouge.png" alt="deposer-rouge.png">
+            </div>
+            <div class="col-md-5">
+              <h3>Déposer</h3>
+              Le robot dépose le drapeau qu'il porte sur la case où il se trouve. Il ne peut y avoir qu'un seul drapeau par case.
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-1">
+              <img class="behind" src="images/repousser-bleu.png" alt="repousser-bleu.png">
+              <img class="infront" src="images/repousser-rouge.png" alt="repousser-rouge.png">
+            </div>
+            <div class="col-md-5">
+              <h3>Repousser</h3>
+              Le robot adverse recule d'une case dans la direction de sa base (vers l'est pour le bleu, vers l'ouest pour le rouge)
+            </div>
+            <div class="col-md-1">
+              <img class="behind" src="images/annuler-rouge.png" alt="annuler-rouge.png">
+              <img class="infront" src="images/annuler-bleu.png" alt="annuler-bleu.png">
+            </div>
+            <div class="col-md-5">
+              <h3>Annuler</h3>
+              L'action que le robot adverse doit faire à ce tour est annulée, même si celui-ci joue en premier. En conséquence, le robot ne fait rien.
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-1">
+              <img class="behind" src="images/x2-rouge.png" alt="x2-rouge.png">
+              <img class="infront" src="images/x2-bleu.png" alt="x2-bleu.png">
+            </div>
+            <div class="col-md-5">
+              <h3>×2</h3>
+              Répète l'action indiquée sur la carte précédente.
+            </div>
+            <div class="col-md-1">
+              <img class="behind" src="images/pause-bleu.png" alt="pause-bleu.png">
+              <img class="infront" src="images/pause-rouge.png" alt="pause-rouge.png">
+            </div>
+            <div class="col-md-5">
+              <h3>Pause</h3>
+              Le robot ne fait rien.
+            </div>
+          </div>
+        </div>
       </div>
 
       <div id="robotRouge">
@@ -141,7 +216,27 @@
 
       <div id="jouer">
         <h3><span class="glyphicon glyphicon-play"></span> Prêt ? C'est parti !</h3>
+        <p>Pour jouer, saisissez les instructions composant votre programme et validez celui-ci. Dès que les deux joueurs ont validé leurs instructions, vous pouvez faire exécuter le programme aux robots.</p>
+        <p>Faites votre choix :</p>
+
+        <div>
+          <span class="glyphicon glyphicon-phone"></span>
+          <div>
+            Jouer à deux sur un même écran avec un mobile (téléphone, tablette). A tour de rôles, chaque joueur prendra l'appareil pour écrire son programme, en se cachant de l'autre joueur.
+          </div>
+        </div>
+
+        <div>
+          <span class="glyphicon glyphicon-globe"></span>
+          <div>
+            Jouer en ligne, contre un autre joueur connecté au même moment. Connectez-vous au chat pour discuter avec les joueurs présents, et créer ou rejoindre une partie.
+          </div>
+        </div>
       </div>
     </div>
+
+    <footer class="footer">
+      <div>© Astrapi (jeu proposé dans le N°875 - Fév. 2017) - Licence Informatique de l'Université de Franche-Comté</div>
+    </footer>
   </body>
 </html>
