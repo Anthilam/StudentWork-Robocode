@@ -1,5 +1,35 @@
-#myCanvas {
+#image, #layer {
+  position: absolute;
+  border: 1px solid #000000;
+  top: 100px;
+  left: 100px;
+  cursor: none;
+}
+
+#image {
   background-image: url("../images/bgDessin.png");
   background-size: 50px 50px;
-  border: 1px solid #000000;
+}
+
+#tools {
+  position: absolute;
+  width: 50%;
+  top: 30%;
+  right: 0%;
+}
+
+#tools input {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+#text {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  top: 75%;
+}
+
+#text div {
+  display: inline-block;
 }
