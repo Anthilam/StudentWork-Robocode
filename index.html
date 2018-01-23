@@ -1,9 +1,11 @@
+<!DOCTYPE html>
+
 <html>
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link href="bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="bootstrap/dist/js/bootstrap.js"></script>
@@ -11,25 +13,26 @@
   </head>
 
   <body data-spy="scroll" data-target=".navbar" data-offset="50">
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="#">Robocode</a>
         </div>
-
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav">
-            <li><a href="#reglesDuJeu"><span class="glyphicon glyphicon-list-alt"></span> Règles du jeu</a></li>
-            <li><a href="#actions"><span class="glyphicon glyphicon-wrench"></span> Actions</a></li>
-            <li><a href="#jouer"><span class="glyphicon glyphicon-play"></span> Jouer</a></li>
-          </ul>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
+        <div>
+          <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+              <li><a href="#regles"><span class="glyphicon glyphicon-list-alt"></span> Règles du jeu</a></li>
+              <li><a href="#actions"><span class="glyphicon glyphicon-wrench"></span> Actions</a></li>
+              <li><a href="#jouer"><span class="glyphicon glyphicon-play"></span> Jouer</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </nav>
 
     <div class="container">
@@ -68,7 +71,7 @@
         </div>
       </div>
 
-      <div id="reglesDuJeu">
+      <div id="regles">
         <h3><span class="glyphicon glyphicon-list-alt"></span> Règles du jeu</h3>
 
         <p>Robocode est un jeu de réflexion qui se joue à deux joueurs, au tour par tour. Chaque joueur contrôle un robot qu'il programme avec un jeu d'instructions très simple que le robot exécutera à chaque tour de jeu.</p>

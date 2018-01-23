@@ -1,0 +1,5 @@
+#myCanvas {
+  background-image: url("../images/bgDessin.png");
+  background-size: 50px 50px;
+  border: 1px solid #000000;
+}
