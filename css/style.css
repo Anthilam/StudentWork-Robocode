@@ -1,21 +1,44 @@
+/*--Body----------------------------------------------------------------------*/
 body {
   font-family: 'Roboto',sans-serif;
+  font-size: 10.5pt;
   position: relative;
   padding-top: 75px;
 }
 
+/*--Navbar--------------------------------------------------------------------*/
 .navbar {
   font-weight: 700;
 }
 
+/*--Jumbotron-----------------------------------------------------------------*/
+.jumbotron h2 {
+  font-weight: bold;
+}
+
+/*--Carousel------------------------------------------------------------------*/
 .carousel img {
   margin: auto;
 }
 
+/*--Titres sections-----------------------------------------------------------*/
 #regles h3, #actions h3, #jouer h3 {
   font-weight: 700;
 }
 
+/*--Regles du jeu-------------------------------------------------------------*/
+#regles label {
+  display: block;
+  font-size: 1em;
+  margin-top: 1.33em;
+  margin-bottom: 1.33em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  font-size: 14pt;
+}
+
+/* Gestion affichage texte */
 input {
   display: none;
 }
@@ -28,48 +51,76 @@ input:checked + div .txt {
   display: block;
 }
 
-input + div label h4 span {
+/* Gestion animation triangle */
+input + div label span {
   transition: transform 0.5s;
 }
 
-input:checked + div label h4 span {
+input:checked + div label span {
   transform: rotate(90deg);
 }
 
+/*--Robots--------------------------------------------------------------------*/
 #robotBleu, #robotRouge {
   position: relative;
   height: 100px;
 }
 
+/* Animation chenille */
 .i1 {
-  width: 60px;
+  height: 100px;
+  width: 70px;
+}
+
+.bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 5px;
+}
+
+.bg:before, .bg:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: url("../images/robot-chenilles.png");
+  background-size: contain;
+  animation: move 2s infinite linear;
+}
+
+.bg:before {
+    right: 100%;
+}
+
+@keyframes move {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 .i2 {
   position: absolute;
+  vertical-align: middle;
   left: -20px;
-  height: 50px;
-  width: 100px;
+  height: 60px;
   top: 20px;
 }
 
+/* Animation mouvement robot */
 #robotBleu .fullBody {
   position: absolute;
-  animation-name: anim_robot;
-  animation-duration: 8s;
-  animation-iteration-count: infinite;
-  animation-direction: normal;
-  animation-timing-function: linear;
+  animation: anim_robot 8s infinite linear;
 }
 
 #robotRouge .fullBody {
   position: absolute;
-  animation-name: anim_robot;
-  animation-duration: 8s;
+  animation: anim_robot 8s infinite linear;
   animation-delay: -4s;
-  animation-iteration-count: infinite;
-  animation-direction: backwards;
-  animation-timing-function: linear;
 }
 
 @keyframes anim_robot {
@@ -94,11 +145,13 @@ input:checked + div label h4 span {
     }
 }
 
+/*--Actions-------------------------------------------------------------------*/
 #actions h3 {
   margin: 0 0 10px 0;
 }
 
-#actions .row {
+/* Tableaux des actions */
+#tabActions .row {
   height: 100px;
   padding: 10px;
   margin: 10px -20px;
@@ -117,26 +170,93 @@ input:checked + div label h4 span {
   top: -15px;
 }
 
-#jouer div {
-  display: inline-block;
-  text-align: justify;
-  width: 40%;
+/*--Jouer---------------------------------------------------------------------*/
+.letsgo {
+  text-align: center;
 }
 
-.glyphicon-phone, .glyphicon-globe {
-  zoom: 1000%;
+.letsgo a {
+  text-decoration: none;
+  color: #404040;
 }
 
+/*--Footer--------------------------------------------------------------------*/
 .footer {
   margin-top: 50px;
   text-align: center;
-  width: 100%;
   height: 60px;
   color: #8e8e8e;
   background-color: #f5f5f5;
-  padding: 5px 0;
 }
 
 .footer div {
-  padding: 10px 0;
+  vertical-align: middle;
+  padding-top: calc(30px - 5.25pt);
+}
+
+/*--Media queries-------------------------------------------------------------*/
+/* Taille d'écran de 0 à 768px */
+@media (min-width: 0px) and (max-width: 768px) {
+  .jumbotron {
+    overflow: hidden;
+  }
+}
+
+/* Taille d'écran de 0 à 992px */
+@media (min-width: 0px) and (max-width: 992px) {
+  .letsgo div {
+    display: inline-block;
+    vertical-align: top;
+    text-align: justify;
+    margin-bottom: 20px;
+  }
+
+  .letsgo div div {
+    width: 80%;
+  }
+
+  .glyphicon-phone, .glyphicon-globe {
+    zoom: 500%;
+  }
+
+  #robotBleu, #robotRouge {
+    display: none;
+  }
+
+  #tabActions .col-md-1 {
+    position: absolute;
+  }
+
+  #tabActions .col-md-5 {
+    height: 100px;
+    margin-left: 100px;
+    margin-bottom: 25px;
+    overflow: auto;
+  }
+
+  #tabActions .row {
+    margin-bottom: 150px;
+  }
+}
+
+/* Taille d'écran de 992px+ */
+@media (min-width: 992px) {
+  .letsgo div {
+    display: inline-block;
+    vertical-align: bottom;
+    width: 400px;
+    text-align: justify;
+  }
+
+  .letsgo div div {
+    width: 45%;
+  }
+
+  .glyphicon-phone, .glyphicon-globe {
+    zoom: 1000%;
+  }
+
+  #tabActions .col-md-1 {
+    right: 10px;
+  }
 }
