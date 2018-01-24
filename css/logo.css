@@ -1,8 +1,12 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
 #image, #layer {
   position: absolute;
   border: 1px solid #000000;
-  top: 100px;
-  left: 100px;
+  top: 50px;
+  left: 50px;
   cursor: none;
 }
 
@@ -13,21 +17,48 @@
 
 #tools {
   position: absolute;
-  width: 50%;
-  top: 30%;
-  right: 0%;
+  width: 80px;
+  top: 50px;
+  left: 550px;
+  text-align: center;
 }
 
-#tools input {
-  width: 100px;
-  margin-bottom: 20px;
+#tools ul {
+  list-style: none;
+  padding: 0;
+}
+
+#tools li {
+  margin-bottom: 10px;
+}
+
+#tools input[type="radio"], #tools input[type="button"] {
+  display: none;
+}
+
+#tools label img {
+  width: 48px;
+}
+
+.border label img {
+  border: 1px solid #000000;
+  box-shadow: 0px 2px 2px #000000;
+}
+
+#tools input:checked + label img {
+  box-shadow: 0px 0px 5px 2px #0092c7;
+}
+
+#tools input[type="range"] {
+  width: 48px;
+  margin: 0;
 }
 
 #text {
   position: absolute;
-  text-align: center;
-  width: 100%;
-  top: 75%;
+  width: 500px;
+  top: 600px;
+  left: 50px;
 }
 
 #text div {

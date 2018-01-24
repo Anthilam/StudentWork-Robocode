@@ -4,7 +4,6 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="../bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../css/logo.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -17,8 +16,31 @@
     <canvas id="layer" width="500" height="500"></canvas>
 
     <div id="tools">
-      <input id="sizePen" type="range" max="30" min="1"></input>
-      <input id="clearImage" type="button" value="Clear"></input>
+      <ul>
+        <li class="border">
+          <input id="pen" type="radio" name="tool" value="pen" checked>
+          <label for="pen"><img src="../images/icone-pinceau.png" alt="icone-pinceau"></label>
+        </li>
+        <li class="border">
+          <input id="eraser" type="radio" name="tool" value="eraser">
+          <label for="eraser"><img src="../images/icone-gomme.png" alt="icone-gomme"></label>
+        </li>
+        <li class="border">
+          <input id="stroke" type="radio" name="tool" value="stroke">
+          <label for="stroke"><img src="../images/icone-trait.png" alt="icone-trait"></label>
+        </li>
+        <li class="border">
+          <input id="rectangle" type="radio" name="tool" value="rectangle">
+          <label for="rectangle"><img src="../images/icone-rectangle.png" alt="icone-rectangle"></label>
+        </li>
+        <li>
+          <input id="sizePen" type="range" max="30" min="1">
+        </li>
+        <li>
+          <input id="clearImage" type="button">
+          <label for="clearImage"><img src="../images/icone-nouveau.png" alt="icone-nouveau"></label>
+        </li>
+      </ul>
     </div>
 
     <div id="text">
