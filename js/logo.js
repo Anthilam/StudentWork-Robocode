@@ -39,30 +39,20 @@ function erase(x, y, ctx) {
 }
 
 // Fonction dessinant un trait
-function drawStroke(x, y, x2, y2, ctx, save) {
+function drawStroke(x, y, x2, y2, ctx) {
   ctx.beginPath();
   ctx.moveTo(x, y);
   ctx.lineTo(x2, y2);
   ctx.strokeStyle ="white";
   ctx.lineWidth = sizePen;
   ctx.stroke();
-  if (!save) {
-    save_x = 0;
-    save_y = 0;
-    originSet = false;
-  }
 }
 
 // Fonction dessinant un rectangle
-function drawRect(x, y, x2, y2, ctx, save) {
+function drawRect(x, y, x2, y2, ctx) {
   ctx.beginPath();
   ctx.fillStyle="white";
   ctx.fillRect(x2, y2, x-x2, y-y2);
-  if (!save) {
-    save_x = 0;
-    save_y = 0;
-    originSet = false;
-  }
 }
 
 document.addEventListener("DOMContentLoaded", function(e) {
@@ -91,10 +81,10 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
     if (originSet) {
       if (document.getElementById("stroke").checked) {
-        drawStroke(x, y, save_x, save_y, ctx_layer, 1);
+        drawStroke(x, y, save_x, save_y, ctx_layer);
       }
       else if (document.getElementById("rect").checked) {
-        drawRect(x, y, save_x, save_y, ctx_layer, 1);
+        drawRect(x, y, save_x, save_y, ctx_layer);
       }
     }
     else {
@@ -135,10 +125,16 @@ document.addEventListener("DOMContentLoaded", function(e) {
       }
       else {
         if (document.getElementById("stroke").checked) {
-          drawStroke(x, y, save_x, save_y, ctx_image, 0);
+          drawStroke(x, y, save_x, save_y, ctx_image);
+          save_x = 0;
+          save_y = 0;
+          originSet = false;
         }
         else if (document.getElementById("rect").checked) {
-          drawRect(x, y, save_x, save_y, ctx_image, 0);
+          drawRect(x, y, save_x, save_y, ctx_image);
+          save_x = 0;
+          save_y = 0;
+          originSet = false;
         }
       }
     }
@@ -146,6 +142,18 @@ document.addEventListener("DOMContentLoaded", function(e) {
 
   btn_newImage.addEventListener("click", function(e) {
     ctx_image.clearRect(0, 0, layer.width, layer.height);
+  });
+
+  btn_saveImage.addEventListener("click", function(e) {
+    localStorage.setItem("img", image.toDataURL("image/png"));
+  });
+
+  btn_openImage.addEventListener("click", function(e) {
+    var base_img = new Image();
+    base_img.onload = function(){
+      ctx_image.drawImage(base_img, 0, 0);
+    }
+    base_img.src = localStorage.getItem("img");
   });
 
   // Mousedown
