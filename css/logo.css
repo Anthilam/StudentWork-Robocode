@@ -46,7 +46,7 @@ body {
 }
 
 #tools input:checked + label img {
-  box-shadow: 0px 0px 5px 2px #0092c7;
+  box-shadow: 0px 0px 5px 2px #0067c7;
 }
 
 #tools input[type="range"] {
