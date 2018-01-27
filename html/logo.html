@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<!-- Timothée GUY - 2018 -->
+
 <html>
   <head>
     <meta charset="UTF-8">
@@ -12,6 +14,8 @@
   </head>
 
   <body>
+    <h1>Dessinez votre logo !</h1>
+
     <canvas id="image" width="500" height="500"></canvas>
     <canvas id="layer" width="500" height="500"></canvas>
 
@@ -37,12 +41,23 @@
           <input id="sizePen" type="range" max="30" min="1">
         </li>
         <li>
+          <input id="colorPen" type="color" value="#FFFFFF">
+        </li>
+        <li>
           <input id="newImage" type="button">
           <label for="newImage"><img src="../images/icone-nouveau.png" alt="icone-nouveau"></label>
         </li>
         <li>
           <input id="openImage" type="button">
           <label for="openImage"><img src="../images/icone-ouvrir.png" alt="icone-ouvrir"></label>
+          <div id="savedImg">
+            <p>
+              Images enregistrées
+              <input id="closeOpenImage" type="button">
+              <label for="closeOpenImage">X</label>
+            </p>
+            <div id="div_list"></div>
+          </div>
         </li>
         <li>
           <input id="saveImage" type="button">
