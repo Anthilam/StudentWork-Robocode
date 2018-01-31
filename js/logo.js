@@ -65,6 +65,14 @@ function clearCtx(ctx, canvas) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function closeOpenImage() {
+  var savedImg = document.getElementById("savedImg");
+  savedImg.style.display = "none";
+  // Suppression de la liste du DOM au cas où celle-ci change
+  var list = document.getElementById("ul_img");
+  list.remove();
+}
+
 document.addEventListener("DOMContentLoaded", function(e) {
   // Récupération des canvas
   var image = document.getElementById("image");
@@ -207,21 +215,20 @@ document.addEventListener("DOMContentLoaded", function(e) {
     div_list.appendChild(list);
 
     // Création des éléments de la liste dans le DOM
-    for (let i of tab_img) {
+    tab_img.forEach(function(i) {
       // Chaque élément de la liste a pour id le nom de l'image
       var elem = document.createElement("li");
       att = document.createAttribute("id");
       att.value = i;
       elem.setAttributeNode(att);
       list.appendChild(elem);
+
       // Création du nom de l'image
       var t = document.createTextNode(i);
       elem.appendChild(t);
+
       // Création des images
       var img = document.createElement("img");
-      att = document.createAttribute("class");
-      att.value = "test";
-      img.setAttributeNode(att);
       img.src = localStorage.getItem(i);
       elem.appendChild(img);
       // Ajout d'un évènement si on clic sur l'image
@@ -233,6 +240,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
           ctx_image.drawImage(base_img, 0, 0);
         }
         base_img.src = img.src;
+        closeOpenImage();
       });
 
       // Création du bouton de suppression
@@ -246,17 +254,15 @@ document.addEventListener("DOMContentLoaded", function(e) {
       del.addEventListener("click", function(e) {
         document.getElementById(i).remove(); // On enlève l'élément de la liste
         localStorage.removeItem(i); // On enlève l'image du localStorage
-        tab_img.pop(i); // On enlève le nom du tableau
+        // On enlève l'image de tab_img
+        var found = tab_img.findIndex(function (e) { return e === i;});
+        tab_img.splice(found,1);
       });
-    }
+    });
   });
 
   // btn_closeOpenImage fermant la liste ouverte lors du clic sur btn_openImage
   btn_closeOpenImage.addEventListener("click", function(e) {
-    var savedImg = document.getElementById("savedImg");
-    savedImg.style.display = "none";
-    // Suppression de la liste du DOM au cas où celle-ci change
-    var list = document.getElementById("ul_img");
-    list.remove();
+    closeOpenImage();
   });
 });
