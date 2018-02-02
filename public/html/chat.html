@@ -21,16 +21,14 @@
     </div>
 
     <div id="chat">
-      <h2>Chat de Robocode - </h2>
-      <div id="msgArea">
-
+      <h2 id="title">Chat de Robocode - </h2>
+      <div id="msgArea"></div>
+      <div id="usrArea"></div>
+      <div id="inputs">
+        <input id="message" type="text"></input>
+        <input type="button" value="Envoyer" onclick="sendMsg()"></input>
+        <input type="button" value="Retour à l'accueil" onclick="redirect()"></input>
       </div>
-      <div id="connectedUsers">
-
-      </div>
-      <input id="message" type="text"></input>
-      <input type="button" value="Envoyer" onclick="sendMsg()"></input>
-      <input type="button" value="Retour à l'accueil" onclick="redirect()"></input>
     </div>
   </body>
 </html>

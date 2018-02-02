@@ -52,6 +52,12 @@ body {
 	font-family: 'Roboto', sans-serif;
 }
 
+h2 {
+	font-weight: bold;
+	font-size: 14pt;
+	margin: 10px;
+}
+
 #newUser {
 	height: 100px;
 	width: 300px;
@@ -79,18 +85,31 @@ body {
 	border-radius: 5px;
 }
 
-#chat div {
-	display: inline-block;
-}
-
 #msgArea {
-	width: 70%;
-	height: 90%;
+	position: absolute;
+	left: 20px;
+	width: 400px;
+	height: 300px;
 	background-color: #ececec;
+	overflow: auto;
 }
 
-#connectedUsers {
-	width: 20%;
-	height: 90%;
+#usrArea {
+	position: absolute;
+	left: 430px;
+	width: 150px;
+	height: 300px;
 	background-color: #ececec;
+	overflow: auto;
+}
+
+#message {
+	width: 300px;
+}
+
+#inputs {
+	position: absolute;
+	height: 50px;
+	top: 350px;
+	left: 20px;
 }
