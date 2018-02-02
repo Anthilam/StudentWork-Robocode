@@ -87,7 +87,7 @@ exports.getMessages = function(u, k, since) {
         console.log("--> [chat] Utilisateur inconnu ou clé incorrecte.");
         return null;
     }
-    // console.log("--> [chat] Récupération des messages depuis " + since.toLocaleString());
+    console.log("--> [chat] Récupération des messages depuis " + since.toLocaleString());
     return {
         general:    getMessagesFromTabSince(general, since),
         user:       users[u] ? getMessagesFromTabSince(users[u].messages, since) : [],
