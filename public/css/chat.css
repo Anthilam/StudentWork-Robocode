@@ -59,7 +59,7 @@ h2 {
 }
 
 #newUser {
-	height: 100px;
+	height: 120px;
 	width: 300px;
 	text-align: center;
 	background-color: #c8c8c8;
@@ -74,6 +74,12 @@ h2 {
 
 #newUser input[type="button"] {
 	display: inline-block;
+}
+
+#newUser p {
+	margin: 5px 0 5px 0;
+	color: #e30000;
+	font-weight: bold;
 }
 
 #chat {
