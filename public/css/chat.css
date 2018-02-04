@@ -119,3 +119,56 @@ h2 {
 	top: 350px;
 	left: 20px;
 }
+
+#msgArea div {
+	margin: 5px 0 5px 0;
+}
+
+.sys {
+	color: #ff0000;
+}
+
+.emoji {
+	display: inline-block;
+	vertical-align: bottom;
+	width: 25px;
+	height: 25px;
+	overflow: hidden;
+}
+
+.emoji img {
+	width: 75px;
+	height: 75px;
+}
+
+.sleepy img {
+	margin-left: -25px;
+}
+
+.love img {
+	margin-left: -50px;
+}
+
+.lookup img {
+	margin-top: -25px;
+}
+
+.angry img {
+	margin: -25px 0 0 -25px;
+}
+
+.sad img {
+	margin: -25px 0 0 -50px;
+}
+
+.smile img {
+	margin-top: -50px;
+}
+
+.grin img {
+	margin: -50px 0 0 -25px;
+}
+
+.sick img {
+	margin: -50px 0 0 -50px;
+}

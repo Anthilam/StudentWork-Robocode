@@ -61,8 +61,8 @@ function sendMsg() {
 
   var match = /^\/to:*/g.exec(message);
   if (match != null) {
-    var to = message.split(":");
-    to = to[1].split(" ");
+    var to = message.split(/:(.+)/);
+    to = to[1].split(/ (.+)/);
     request.open("PUT", "/chat/"+user+"/"+key+"/"+to[0], true);
     message = to[1];
   }
@@ -76,6 +76,21 @@ function sendMsg() {
 
 function startGetMsg() {
   window.setInterval(getMsg, 2000);
+}
+
+function emojification(text) {
+  var txt = text
+    .replace(/:D/g, "<div class=\"emoji happy\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:zzz:/g, "<div class=\"emoji sleepy\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:love:/g, "<div class=\"emoji love\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:lookup:/g, "<div class=\"emoji lookup\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:angry:/g, "<div class=\"emoji angry\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:\(/g, "<div class=\"emoji sad\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:\)/g, "<div class=\"emoji smile\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:grin:/g, "<div class=\"emoji grin\"><img src=\"../images/emoji.png\"></div>")
+    .replace(/:sick:/g, "<div class=\"emoji sick\"><img src=\"../images/emoji.png\"></div>");
+
+  return txt;
 }
 
 function getMsg() {
@@ -95,6 +110,7 @@ function getMsg() {
   request.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       var data = JSON.parse(this.responseText);
+
       var date = new Date();
       var hours = date.getHours();
       if (hours < 10) {
@@ -109,22 +125,25 @@ function getMsg() {
         seconds = "0"+seconds;
       }
       date = hours + ":" + minutes + ":" + seconds;
+
       for (var i in data.general) {
         if (data.general[i].from == null) {
-          msgArea.innerHTML += "<p>" + date + " - (Système) : " + data.general[i].text + "</p>";
+          msgArea.innerHTML += "<div class=\"sys\">" + date + " - (Système) : " + data.general[i].text + "</div>";
         }
         else {
-          msgArea.innerHTML += "<p>" + date + " - " + data.general[i].from + " : " + data.general[i].text + "</p>";
+          var text = emojification(data.general[i].text);
+          msgArea.innerHTML += "<div>" + date + " - " + data.general[i].from + " : " + text + "</div>";
         }
       }
 
       for (var i in data.user) {
-        msgArea.innerHTML += "<p>" + date + " - " + data.user[i].from + " : " + data.user[i].text + "</p>";
+        var text = emojification(data.user[i].text);
+        msgArea.innerHTML += "<div>" + date + " - " + data.user[i].from + " : " + text + "</div>";
       }
 
       usrArea.innerHTML = "";
       for (var i in data.users) {
-        usrArea.innerHTML += "<p>" + data.users[i] + "</p>";
+        usrArea.innerHTML += "<div>" + data.users[i] + "</div>";
       }
     }
   }
