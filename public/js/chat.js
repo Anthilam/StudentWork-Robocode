@@ -4,6 +4,12 @@ function redirect() {
   window.location = "../index.html";
 }
 
+function enterUsr(e) {
+  if (e.keyCode === 13) {
+    createUser();
+  }
+}
+
 function createUser() {
   var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
   var user = document.getElementById("pseudo").value;
@@ -26,7 +32,7 @@ function createUser() {
         startGetMsg();
       }
       else {
-        document.getElementById("newUser").innerHTML += "<p>Un utilisateur possède déjà ce pseudo !</p>";
+        document.getElementById("error").innerHTML = "Pseudo incorrect / Un utilisateur possède déjà ce pseudo";
       }
     }
   }
@@ -45,7 +51,7 @@ function deleteUser() {
   localStorage.removeItem("key");
 }
 
-function pressEnter(e) {
+function enterMsg(e) {
   if (e.keyCode === 13) {
     sendMsg();
   }
@@ -132,7 +138,12 @@ function getMsg() {
         }
         else {
           var text = emojification(data.general[i].text);
-          msgArea.innerHTML += "<div>" + date + " - " + data.general[i].from + " : " + text + "</div>";
+          if (data.general[i].from == user) {
+            msgArea.innerHTML += "<div class=\"self\">" + date + " - " + data.general[i].from + " : " + text + "</div>";
+          }
+          else {
+            msgArea.innerHTML += "<div>" + date + " - " + data.general[i].from + " : " + text + "</div>";
+          }
         }
       }
 

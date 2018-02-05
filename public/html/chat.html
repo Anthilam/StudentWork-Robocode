@@ -14,10 +14,12 @@
 
   <body>
     <div id="newUser">
-      <h2>Choisissez votre pseudo:</h2>
-      <input type="text" id="pseudo"></input>
+      <h2>Robocode - Chat</h2>
+      <h3>Choisissez votre pseudo:</h3>
+      <input type="text" id="pseudo" onkeypress="enterUsr(event)"></input>
       <input type="button" value="Se connecter" onclick="createUser()"></input>
       <input type="button" value="Retour à l'accueil" onclick="redirect()"></input>
+      <div id="error"></div>
     </div>
 
     <div id="chat">
@@ -25,7 +27,7 @@
       <div id="msgArea"></div>
       <div id="usrArea"></div>
       <div id="inputs">
-        <input id="message" type="text" onkeypress="pressEnter(event)"></input>
+        <input id="message" type="text" onkeypress="enterMsg(event)"></input>
         <input type="button" value="Envoyer" onclick="sendMsg()"></input>
         <input type="button" value="Retour à l'accueil" onclick="redirect()"></input>
       </div>
