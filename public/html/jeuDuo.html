@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<!-- Timothée GUY - 2018 -->
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="../css/jeuDuo.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!--  <script src="../js/jeuDuo.js"></script>-->
+    <title>Robocode - Le jeu</title>
+  </head>
+  <body>
+    <div id="main">
+      <div id="title">
+        <h1>Début de la partie</h1>
+      </div>
+      <div id="board_container">
+        <script>
+          document.write('<table id="board">');
+            for(var i = 0; i < 9; i++){
+              document.write('<tr>');
+                for(var j = 0; j < 9; j++){
+                    document.write('<td></td>');
+                }
+              document.write('</tr>');
+            }
+          document.write('</table>');
+        </script>
+      </div>
+    </div>
+  </body>
+</html>
