@@ -80,6 +80,30 @@ h1 {
   border: 1px solid;
 }
 
+#blueRobot, #redRobot, .blueFlag, .redFlag {
+	position: absolute;
+	height: 9vh;
+	width: 9vh;
+	background-size: 9vh auto;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#blueRobot {
+	background-image: url('../images/robot-corps-bleu.png');
+}
+
+#redRobot {
+	background-image: url('../images/robot-corps-rouge.png');
+}
+
+.blueFlag {
+	background-image: url('../images/flag-blue.png');
+}
+
+.redFlag {
+	background-image: url('../images/flag-red.png');
+}
 
 
 /* Taille d'écran de 0 à 992px */

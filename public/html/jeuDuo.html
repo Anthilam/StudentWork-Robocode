@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../css/jeuDuo.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <!--  <script src="../js/jeuDuo.js"></script>-->
+    <script src="../js/jeuDuo.js"></script>
     <title>Robocode - Le jeu</title>
   </head>
   <body>
@@ -18,17 +18,7 @@
         <h1>Début de la partie</h1>
       </div>
       <div id="board_container">
-        <script>
-          document.write('<table id="board">');
-            for(var i = 0; i < 9; i++){
-              document.write('<tr>');
-                for(var j = 0; j < 9; j++){
-                    document.write('<td></td>');
-                }
-              document.write('</tr>');
-            }
-          document.write('</table>');
-        </script>
+        <table id="board"></table>
       </div>
     </div>
   </body>
