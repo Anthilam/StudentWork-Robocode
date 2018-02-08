@@ -63,36 +63,62 @@ h1 {
   margin-top: 5%;
   left: 15%;
   width: 80%;
+  height: 80%;
 }
 
 #board_container{
+  width: 50%;
+  height: 50%;
   position: relative;
-  left: 5%;
+  float: left;
+  margin: auto;
 }
 
 #board{
+  height: 100%;
+  width: 100%;
   border-collapse: : collapse;
 }
 
+
+
+
 #board td{
-  height: 9vh;
-  width: 9vh;
+  height: 8vh;
+  background-color: #F5F5DC;
   border: 1px solid;
 }
 
+#red_deck, #blue_deck{
+  margin-top: 2%;
+  border: 1px solid;
+  border-radius: 10px;
+  float: left;
+  width: 8%;
+}
+
+#red_deck{
+  background-color: red;
+  margin-right: 2vh;
+}
+
+#blue_deck{
+  background-color: blue;
+  margin-left: 2vh;
+}
 
 
-/* Taille d'écran de 0 à 992px */
-@media (min-width: 0px) and (max-width: 414px) {
+.red_card, .blue_card{
+  height: 60%;
+  width: 60%;
+  margin-left: 20%;
+  margin-top: 15%;
+  margin-bottom: 5%;
+}
+
+@media screen and (orientation: portrait) {
   #main{
-    left: 0%;
+    left: 2%;
   }
 
-  #board_container{
-    left: 0%;
-  }
-
-  #board td{
-    height: 4.5vh;
-  }
 }
