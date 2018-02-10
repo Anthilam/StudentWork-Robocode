@@ -67,33 +67,42 @@ h1 {
 }
 
 #board_container{
-  width: 50%;
-  height: 50%;
+  width: 50vw;
+  height: 50vw;
   position: relative;
   float: left;
   margin: auto;
 }
 
-#board{
+#board {
+	position: relative;
   height: 100%;
   width: 100%;
-  border-collapse: : collapse;
 }
 
-
-
-
-#board td{
-  height: 8vh;
-  background-color: #F5F5DC;
+#board td {
+  height: calc(100% / 9);
+  background-color: #e6e6e6;
   border: 1px solid;
+}
+
+#board .redBase {
+	background-color: #ff9d9d;
+}
+
+#board .blueBase {
+	background-color: #9da7ff;
+}
+
+#board .flagBase {
+	background-color: #9dffa4;
 }
 
 #blueRobot, #redRobot, .blueFlag, .redFlag {
 	position: absolute;
-	height: 9vh;
-	width: 9vh;
-	background-size: 9vh auto;
+	height: calc(50vw / 9);
+	width: calc(50vw / 9);
+	background-size: calc(50vw / 11) auto;
 	background-repeat: no-repeat;
 	background-position: center;
 }
