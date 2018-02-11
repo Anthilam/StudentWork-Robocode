@@ -58,6 +58,9 @@ h1 {
   font-size: 20pt;
   font-weight: bold;
 }
+#red_deck li, #blue_deck li{
+	position: relative;
+}
 
 #main{
   position: relative;
@@ -142,6 +145,20 @@ h1 {
   margin-left: 2vh;
 }
 
+.text_card{
+	position: absolute;
+	color: black;
+	z-index: 10;
+	top: 25%;
+	font-size: 4vw;
+	left: 2.7vw;
+	color: #F8F8FF;
+	opacity: 0.9;
+}
+
+.text_card:hover{
+	cursor: pointer;
+}
 
 .red_card, .blue_card{
   height: 100%;
@@ -149,6 +166,7 @@ h1 {
   margin-left: 20%;
   margin-top: 15%;
   margin-bottom: 5%;
+	z-index: 2;
 }
 
 #title{
@@ -165,20 +183,12 @@ h1 {
 
 #title>h1{
 	text-align: center;
-	line-height: 7vh;
+	line-height: 7vw;
 	color: white;
+	font-size: 3vw;
 }
 
 @media screen and (orientation: portrait) {
-  #main{
-    left: 10%;
-  }
-  
-  #title>h1{
-	font-size: 12pt;
-	line-height: 4vh;
-  }
-  
   #title{
 	  height: 2%;
   }
