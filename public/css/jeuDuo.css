@@ -71,8 +71,8 @@ h1 {
 }
 
 #board_container{
-  width: 50vw;
-  height: 50vw;
+  width: 50vh;
+  height: 50vh;
   position: relative;
   float: left;
   margin: auto;
@@ -104,9 +104,9 @@ h1 {
 
 #blueRobot, #redRobot, .blueFlag, .redFlag {
 	position: absolute;
-	height: calc(50vw / 9);
-	width: calc(50vw / 9);
-	background-size: calc(50vw / 11) auto;
+	height: calc(50vh / 9);
+	width: calc(50vh / 9);
+	background-size: calc(50vh / 11) auto;
 	background-repeat: no-repeat;
 	background-position: center;
 }
