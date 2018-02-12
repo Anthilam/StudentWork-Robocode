@@ -176,6 +176,26 @@ function init() {
   refreshPos();
 }
 
+function show_deck(string){
+  document.getElementById("deck").style.display = "block";
+  var html = "";
+  if(string == "red"){
+    html += '<img src="../images/annuler-rouge.png" width="45%"">';
+    html += '<img src="../images/deposer-rouge.png">';
+    html += '<img src="../images/est-rouge.png">';
+    html += '<img src="../images/est-x2-rouge.png">';
+    html += '<img src="../images/nord-rouge.png">';
+    html += '<img src="../images/ouest-rouge.png">';
+    html += '<img src="../images/pause-rouge.png">';
+    html += '<img src="../images/prendre-rouge.png">';
+    html += '<img src="../images/repousser-rouge.png">';
+    html += '<img src="../images/sud-rouge.png">';
+    html += '<img src="../images/x2-rouge.png">';
+  }
+  document.getElementById("img_deck").innerHTML = html;
+}
+
+
 function main() {
  console.log("--MAIN--");
 }
