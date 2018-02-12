@@ -32,7 +32,7 @@ class Flag {
   }
 }
 
-// A class representing a red_card
+// A class representing a Card
 class Card {
   constructor(color, name, act) {
     this.isUsed = false;
@@ -213,7 +213,7 @@ function show_deck(string){
     html += '<img src="../images/sud-rouge.png">';
     html += '<img src="../images/x2-rouge.png">';
   }
-  
+
   document.getElementById("img_deck").innerHTML = html;
 }
 
