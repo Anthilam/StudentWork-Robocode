@@ -11,6 +11,11 @@ class Robot {
     this.html.style.top = offsetTop + "px";
     this.html.style.left = offsetLeft + "px";
   }
+
+  useCards() {
+    // Do something with tabCard
+    console.log(this.tabCard);
+  }
 }
 
 // A class representing a flag
@@ -29,98 +34,14 @@ class Flag {
 
 // A class representing a red_card
 class Card {
-  constructor(html) {
+  constructor(color, name, act) {
     this.isUsed = false;
-    this.html = html;
+    this.action = act;
+    this.html = "../images/"+name+"-"+color+".png";
   }
 
-  action(tabCard, i) {
-    console.log("Card");
-  }
-}
-
-class dirCard extends Card {
-  constructor(dir, color) {
-    switch (dir) {
-      case 0: super("../images/nord-"+color+".png"); break;
-      case 1: super("../images/est-"+color+".png"); break;
-      case 2: super("../images/sud-"+color+".png"); break;
-      case 3: super("../images/ouest-"+color+".png"); break;
-      default: super("../images/nord-"+color+".png");
-    }
-    this.dir = dir;
-  }
-
-  action(tabCard, i) {
-    switch (this.dir) {
-      case 0: tabCard[i] = "N"; break;
-      case 1: tabCard[i] = "E"; break;
-      case 2: tabCard[i] = "S"; break;
-      case 3: tabCard[i] = "W"; break;
-      default: tabCard[i] = "N";
-    }
-  }
-}
-
-class dirX2Card extends Card {
-  constructor(color) {
-    if (color == "bleu") {
-      super("../images/ouest-x2-bleu.png");
-      this.dir = 3;
-    }
-    else {
-      super("../images/est-x2-rouge.png");
-      this.dir = 1;
-    }
-  }
-
-  action(tabCard, i) {
-    if (this.dir == 1) {
-      tabCard[i] = "EX2";
-    }
-    else {
-      tabCard[i] = "WX2";
-    }
-  }
-}
-
-class takeCard extends Card {
-  constructor(color) {
-    super("../images/prendre-"+color+".png");
-  }
-
-  action(tabCard, i) {
-    tabCard[i] = "TAKE";
-  }
-}
-
-class putCard extends Card {
-  constructor(color) {
-    super("../images/deposer-"+color+".png");
-  }
-
-  action(tabCard, i) {
-    tabCard[i] = "PUT";
-  }
-}
-
-class repulseCard extends Card {
-  constructor(color) {
-    super("../images/repousser-"+color+".png");
-  }
-
-  action(tabCard, i) {
-    tabCard[i] = "REPULSE";
-  }
-}
-
-class undoCard extends Card {
-  constructor(color) {
-    super("../images/annuler-"+color+".png");
-  }
-
-  action(tabCard, i) {
-    tabCard[i] = "UNDO";
+  reaction(tabCard, i) {
+    tabCard[i] = this.action;
   }
 }
 
@@ -131,8 +52,6 @@ var redRobot = new Robot();
 var tabFlag = [];
 // A boolean table representing which cell of the board is occupied or not
 var tabBoard = [[],[],[],[],[],[],[],[],[]];
-// A table containing the actions of the cards
-var tabCard = [];
 
 /* refreshPos():
  *  Refreshes all the elements position
@@ -278,8 +197,10 @@ function init() {
 
 function show_deck(string){
   document.getElementById("deck").style.display = "block";
+
   var html = "";
-  if(string == "red"){
+
+  if (string == "red") {
     html += '<img src="../images/annuler-rouge.png" width="45%"">';
     html += '<img src="../images/deposer-rouge.png">';
     html += '<img src="../images/est-rouge.png">';
@@ -292,39 +213,41 @@ function show_deck(string){
     html += '<img src="../images/sud-rouge.png">';
     html += '<img src="../images/x2-rouge.png">';
   }
+  
   document.getElementById("img_deck").innerHTML = html;
 }
 
-
 function main() {
   console.log("--MAIN--");
-  var nCard = new dirCard(0, "bleu");
-  var eCard = new dirCard(1, "rouge");
-  var sCard = new dirCard(2, "bleu");
-  var wCard = new dirCard(3, "rouge");
-  var bluex2Card = new dirX2Card("bleu");
-  var redx2Card = new dirX2Card("rouge");
-  var tCard = new takeCard("bleu");
-  var pCard = new putCard("bleu");
-  var rCard = new repulseCard("rouge");
-  var uCard = new undoCard("rouge");
 
+  var blue_north = new Card("bleu", "nord", "N");
+  var blue_east = new Card("bleu", "est", "E");
+  var blue_south = new Card("bleu", "sud", "S");
+  var blue_west = new Card("bleu", "ouest", "W");
+  var blue_west_x2 = new Card("bleu", "ouest-x2", "WX2");
+  var blue_take = new Card("bleu", "prendre", "TAKE");
+  var blue_put = new Card("bleu", "deposer", "PUT");
+  var blue_repulse = new Card("bleu", "repousser", "REP");
+  var blue_undo = new Card("bleu", "annuler", "UNDO");
+  var blue_x2 = new Card("bleu", "x2", "X2");
+  var blue_pause = new Card("bleu", "pause", "STOP");
 
-  nCard.action(tabCard, 0);
-  eCard.action(tabCard, 1);
-  sCard.action(tabCard, 2);
-  wCard.action(tabCard, 3);
-  bluex2Card.action(tabCard, 4);
-  redx2Card.action(tabCard, 5);
-  tCard.action(tabCard, 6);
-  pCard.action(tabCard, 7);
-  rCard.action(tabCard, 8);
-  uCard.action(tabCard, 9);
+  var red_north = new Card("rouge", "nord", "N");
+  var red_east = new Card("rouge", "est", "E");
+  var red_south = new Card("rouge", "sud", "S");
+  var red_west = new Card("rouge", "ouest", "W");
+  var red_east_x2 = new Card("rouge", "est-x2", "EX2");
+  var red_take = new Card("rouge", "prendre", "TAKE");
+  var red_put = new Card("rouge", "deposer", "PUT");
+  var red_repulse = new Card("rouge", "repousser", "REP");
+  var red_undo = new Card("rouge", "annuler", "UNDO");
+  var red_x2 = new Card("rouge", "x2", "X2");
+  var red_pause = new Card("rouge", "pause", "STOP");
 
-  rCard.action(blueRobot.tabCard, 0);
-  uCard.action(redRobot.tabCard, 0);
+  blue_north.reaction(blueRobot.tabCard, 0);
 
-  console.log(tabCard);
+  red_pause.reaction(redRobot.tabCard, 0);
+
   console.log(blueRobot.tabCard);
   console.log(redRobot.tabCard);
 }

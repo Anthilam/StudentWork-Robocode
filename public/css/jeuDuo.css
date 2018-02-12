@@ -47,7 +47,6 @@ table {
 
 /*----------------------------------------------------------------------------*/
 
-
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #F8F8FF;
@@ -58,14 +57,13 @@ h1 {
   font-size: 20pt;
   font-weight: bold;
 }
-#red_deck li, #blue_deck li{
+
+#red_deck li, #blue_deck li {
 	position: relative;
 	z-index: 10;
 }
 
-
-
-#main{
+#main {
   position: relative;
   margin-top: 2%;
   left: 15%;
@@ -73,7 +71,7 @@ h1 {
   height: 100%;
 }
 
-#board_container{
+#board_container {
   width: 75vh;
   height: 75vh;
   position: relative;
@@ -130,65 +128,64 @@ h1 {
 	background-image: url('../images/flag-red.png');
 }
 
-#red_deck, #blue_deck{
+#red_deck, #blue_deck {
+	text-align: center;
   margin-top: 2%;
-  border: 1px solid;
   border-radius: 10px;
   float: left;
   width: 10%;
 }
 
-#red_deck{
-  background-color: red;
+#red_deck {
+	border: 2px solid #a33614;
+  background-color: #db6641;
   margin-right: 2vh;
 }
 
-#blue_deck{
-  background-color: blue;
+#blue_deck {
+	border: 2px solid #1449a3;
+  background-color: #418cdb;
   margin-left: 2vh;
 }
 
-.text_card{
+.text_card {
 	position: absolute;
-	color: black;
 	z-index: 3;
-	top: 40%;
+	top: 38%;
 	font-size: 2vw;
-	left: 3.7vw;
+	left: 3.5vw;
 	color: #F8F8FF;
 	opacity: 0.9;
 }
 
 
-.red_card, .blue_card{
+.red_card, .blue_card {
   height: 100%;
   width: 45%;
-  margin-left: 30%;
   margin-top: 15%;
   margin-bottom: 5%;
 	z-index: 2;
 }
 
-#title{
+#title {
 	width: 40%;
 	height: 5vw;
 	margin-left: 13%;
 	vertical-align: middle;
 	margin-bottom: 1%;
-	border: 1px solid;
+	border: 2px solid #4a4a4a;
 	border-radius: 10px;
-	background-image:linear-gradient(to right,red, blue);
+	background-image: linear-gradient(to right, #db6641, #418cdb);
 }
 
-
-#title>h1{
+#title > h1 {
 	text-align: center;
 	line-height: 5vw;
 	color: white;
 	font-size: 1.5vw;
 }
 
-#deck{
+#deck {
 	position: absolute;
 	z-index: 10;
 	background-color: grey;
@@ -200,7 +197,7 @@ h1 {
 }
 
 @media (min-width: 0px) and (max-width: 1024px) {
-	#board_container{
+	#board_container {
 	  width: 45vw;
 	  height: 45vw;
 	}
@@ -212,8 +209,7 @@ h1 {
 		background-size: calc(45vw / 11) auto;
 	}
 
-	#title{
+	#title {
 		margin-left: 20%;
 	}
-
 }
