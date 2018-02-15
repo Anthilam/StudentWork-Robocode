@@ -57,6 +57,9 @@ var tabBoard = [[],[],[],[],[],[],[],[],[]];
 var blue_deck = [];
 var red_deck = [];
 
+var temporary_blue_hand = [5];
+var temporary_red_hand = [5];
+
 //Var which represent the index of a chosen card in a deck
 var deck_ind = -1;
 
@@ -208,16 +211,17 @@ function init() {
 function show_deck(deck,id){
   deck_ind = id;
   document.getElementById("deck").style.display = "block";
+  document.getElementById("img_deck").innerHTML = "";
   var html;
   console.log(deck);
   if (deck == 0) {
     isRed = true;
-    html = print_deck(red_deck);
+    html = print_deck(red_deck,temporary_red_hand);
     document.getElementById("deck").style.backgroundColor = "#db6641";
     document.getElementById("deck").style.border = "2px solid #a33614";
   }else{
     isRed = false;
-    html = print_deck(blue_deck);
+    html = print_deck(blue_deck,temporary_blue_hand);
     document.getElementById("deck").style.backgroundColor = "#418cdb";
     document.getElementById("deck").style.border = "2px solid #1449a3";
   }
@@ -225,10 +229,12 @@ function show_deck(deck,id){
 }
 
 
-function print_deck(deck){
+function print_deck(deck,temporary_hand){
   var html="";
   for(var i in deck){
-    html += '<input type="image" onclick="chose_card(\''+i+'\')" class="show_deck" src="'+deck[i].html+'" alt="'+i+'">';
+    if(temporary_hand.indexOf(i) == -1){
+        html += '<input type="image" onclick="chose_card(\''+i+'\')" class="show_deck" src="'+deck[i].html+'" alt="'+i+'">';
+    }
   }
   return html;
 }
@@ -242,12 +248,16 @@ function chose_card(ind){
     id = "red_"+deck_ind;
     id_text = "red_text_"+deck_ind;
     src = red_deck[ind].html;
-    redRobot[deck_ind] = red_deck[ind].action;
+    temporary_red_hand[deck_ind] = ind;
+    document.getElementById("img_deck").innerHTML = "";
+    document.getElementById("img_deck").innerHTML = print_deck(red_deck,temporary_red_hand);
   }else{
     id = "blue_"+deck_ind;
     id_text = "blue_text_"+deck_ind;
     src = blue_deck[ind].html;
-    blueRobot[deck_ind] = blue_deck[ind].action;
+    temporary_blue_hand[deck_ind] = ind;
+    document.getElementById("img_deck").innerHTML = "";
+    document.getElementById("img_deck").innerHTML = print_deck(blue_deck,temporary_blue_hand);
   }
   document.getElementById(id).src = src;
   document.getElementById(id_text).style.display = "none";
