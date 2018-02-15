@@ -233,7 +233,7 @@ h3 {
 	font-size: 20pt;
 }
 
-.text_card:hover, #cross:hover, .red_card:hover, .blue_car:hover{
+.text_card:hover, #cross:hover, .red_card:hover, .blue_card:hover{
 	cursor:pointer;
 }
 
