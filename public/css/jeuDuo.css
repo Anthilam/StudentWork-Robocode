@@ -259,7 +259,10 @@ h3 {
 	}
 
 	#deck h3 {
-		font-size: 5pt;
+		font-size: 2vw;
+	}
+	#cross{
+		font-size: 2vw;
 	}
 
 }
