@@ -47,6 +47,7 @@ table {
 
 /*----------------------------------------------------------------------------*/
 
+
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #F8F8FF;
@@ -58,12 +59,24 @@ h1 {
   font-weight: bold;
 }
 
-#red_deck li, #blue_deck li {
+h3 {
+    display: block;
+    font-size: 1.17em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: 0;
+    font-weight: bold;
+}
+
+
+
+#red_deck li, #blue_deck li{
 	position: relative;
 	z-index: 10;
 }
 
-#main {
+#main{
   position: relative;
   margin-top: 2%;
   left: 15%;
@@ -71,7 +84,7 @@ h1 {
   height: 100%;
 }
 
-#board_container {
+#board_container{
   width: 75vh;
   height: 75vh;
   position: relative;
@@ -128,76 +141,104 @@ h1 {
 	background-image: url('../images/flag-red.png');
 }
 
-#red_deck, #blue_deck {
-	text-align: center;
+#red_deck, #blue_deck{
   margin-top: 2%;
+  border: 1px solid;
   border-radius: 10px;
   float: left;
   width: 10%;
 }
 
-#red_deck {
-	border: 2px solid #a33614;
-  background-color: #db6641;
+#red_deck{
+  background-color: red;
   margin-right: 2vh;
 }
 
-#blue_deck {
-	border: 2px solid #1449a3;
-  background-color: #418cdb;
+#blue_deck{
+  background-color: blue;
   margin-left: 2vh;
 }
 
-.text_card {
+.text_card{
 	position: absolute;
+	color: black;
 	z-index: 3;
-	top: 38%;
+	top: 40%;
 	font-size: 2vw;
-	left: 3.5vw;
+	left: 3.7vw;
 	color: #F8F8FF;
 	opacity: 0.9;
 }
 
 
-.red_card, .blue_card {
+.red_card, .blue_card{
   height: 100%;
   width: 45%;
+  margin-left: 30%;
   margin-top: 15%;
   margin-bottom: 5%;
 	z-index: 2;
 }
 
-#title {
+#title{
 	width: 40%;
 	height: 5vw;
 	margin-left: 13%;
 	vertical-align: middle;
 	margin-bottom: 1%;
-	border: 2px solid #4a4a4a;
+	border: 1px solid;
 	border-radius: 10px;
-	background-image: linear-gradient(to right, #db6641, #418cdb);
+	background-image:linear-gradient(to right,red, blue);
 }
 
-#title > h1 {
+
+#title>h1{
 	text-align: center;
 	line-height: 5vw;
 	color: white;
 	font-size: 1.5vw;
 }
 
-#deck {
+#deck{
 	position: absolute;
 	z-index: 10;
-	background-color: grey;
-	width: 50vw;
-	height: 50vw;
-	left: 10%;
-	top:25%;
+	width: 38vw;
+	height: 32vw;
+	left: 8vw;
+	top: 8vw;
 	display: none;
 }
 
+#deck h3{
+	margin-left: 40%;
+	margin-bottom: 2%;
+	color: white;
+}
+
+#img_deck{
+	margin-top: 2vw;
+}
+
+.show_deck{
+	margin-bottom: 1.5vw;
+	margin-left: 2vw;
+	width: 15%;
+}
+
+#cross{
+	position:absolute;
+	left: 95%;
+	top: 1%;
+	color: white;
+	font-size: 20pt;
+}
+
+.text_card:hover, #cross:hover, .red_card:hover, .blue_car:hover{
+	cursor:pointer;
+}
+
 @media (min-width: 0px) and (max-width: 1024px) {
-	#board_container {
+	#board_container{
 	  width: 45vw;
 	  height: 45vw;
 	}
@@ -209,7 +250,16 @@ h1 {
 		background-size: calc(45vw / 11) auto;
 	}
 
-	#title {
+	#title{
 		margin-left: 20%;
 	}
+
+	#deck{
+		left: 15vw;
+	}
+
+	#deck h3 {
+		font-size: 5pt;
+	}
+
 }

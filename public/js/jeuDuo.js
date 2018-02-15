@@ -53,6 +53,16 @@ var tabFlag = [];
 // A boolean table representing which cell of the board is occupied or not
 var tabBoard = [[],[],[],[],[],[],[],[],[]];
 
+//Globals vars which represent the two decks
+var blue_deck = [];
+var red_deck = [];
+
+//Var which represent the index of a chosen card in a deck
+var deck_ind = -1;
+
+//Var which represent if the player change the red or blue deck
+var isRed = true;
+
 /* refreshPos():
  *  Refreshes all the elements position
  */
@@ -195,58 +205,92 @@ function init() {
   refreshPos();
 }
 
-function show_deck(string){
+function show_deck(deck,id){
+  deck_ind = id;
   document.getElementById("deck").style.display = "block";
-
-  var html = "";
-
-  if (string == "red") {
-    html += '<img src="../images/annuler-rouge.png" width="45%"">';
-    html += '<img src="../images/deposer-rouge.png">';
-    html += '<img src="../images/est-rouge.png">';
-    html += '<img src="../images/est-x2-rouge.png">';
-    html += '<img src="../images/nord-rouge.png">';
-    html += '<img src="../images/ouest-rouge.png">';
-    html += '<img src="../images/pause-rouge.png">';
-    html += '<img src="../images/prendre-rouge.png">';
-    html += '<img src="../images/repousser-rouge.png">';
-    html += '<img src="../images/sud-rouge.png">';
-    html += '<img src="../images/x2-rouge.png">';
+  var html;
+  console.log(deck);
+  if (deck == 0) {
+    isRed = true;
+    html = print_deck(red_deck);
+    document.getElementById("deck").style.backgroundColor = "#db6641";
+    document.getElementById("deck").style.border = "2px solid #a33614";
+  }else{
+    isRed = false;
+    html = print_deck(blue_deck);
+    document.getElementById("deck").style.backgroundColor = "#418cdb";
+    document.getElementById("deck").style.border = "2px solid #1449a3";
   }
-
   document.getElementById("img_deck").innerHTML = html;
+}
+
+
+function print_deck(deck){
+  var html="";
+  for(var i in deck){
+    html += '<input type="image" onclick="chose_card(\''+i+'\')" class="show_deck" src="'+deck[i].html+'" alt="'+i+'">';
+  }
+  return html;
+}
+
+function chose_card(ind){
+  var id;
+  var src;
+  var id_text;
+  var action;
+  if(isRed){
+    id = "red_"+deck_ind;
+    id_text = "red_text_"+deck_ind;
+    src = red_deck[ind].html;
+    redRobot[deck_ind] = red_deck[ind].action;
+  }else{
+    id = "blue_"+deck_ind;
+    id_text = "blue_text_"+deck_ind;
+    src = blue_deck[ind].html;
+    blueRobot[deck_ind] = blue_deck[ind].action;
+  }
+  document.getElementById(id).src = src;
+  document.getElementById(id_text).style.display = "none";
+
+}
+
+function close_deck(){
+  document.getElementById("deck").style.display = "none";
 }
 
 function main() {
   console.log("--MAIN--");
 
-  var blue_north = new Card("bleu", "nord", "N");
-  var blue_east = new Card("bleu", "est", "E");
-  var blue_south = new Card("bleu", "sud", "S");
-  var blue_west = new Card("bleu", "ouest", "W");
-  var blue_west_x2 = new Card("bleu", "ouest-x2", "WX2");
-  var blue_take = new Card("bleu", "prendre", "TAKE");
-  var blue_put = new Card("bleu", "deposer", "PUT");
-  var blue_repulse = new Card("bleu", "repousser", "REP");
-  var blue_undo = new Card("bleu", "annuler", "UNDO");
-  var blue_x2 = new Card("bleu", "x2", "X2");
-  var blue_pause = new Card("bleu", "pause", "STOP");
 
-  var red_north = new Card("rouge", "nord", "N");
-  var red_east = new Card("rouge", "est", "E");
-  var red_south = new Card("rouge", "sud", "S");
-  var red_west = new Card("rouge", "ouest", "W");
-  var red_east_x2 = new Card("rouge", "est-x2", "EX2");
-  var red_take = new Card("rouge", "prendre", "TAKE");
-  var red_put = new Card("rouge", "deposer", "PUT");
-  var red_repulse = new Card("rouge", "repousser", "REP");
-  var red_undo = new Card("rouge", "annuler", "UNDO");
-  var red_x2 = new Card("rouge", "x2", "X2");
-  var red_pause = new Card("rouge", "pause", "STOP");
+  blue_deck['blue_north'] = new Card("bleu", "nord", "N");
+  blue_deck['blue_east'] = new Card("bleu", "est", "E");
+  blue_deck['blue_south'] = new Card("bleu", "sud", "S");
+  blue_deck['blue_west'] = new Card("bleu", "ouest", "W");
+  blue_deck['blue_west_x2'] = new Card("bleu", "ouest-x2", "WX2");
+  blue_deck['blue_take'] = new Card("bleu", "prendre", "TAKE");
+  blue_deck['blue_put'] = new Card("bleu", "deposer", "PUT");
+  blue_deck['blue_repulse'] = new Card("bleu", "repousser", "REP");
+  blue_deck['blue_undo'] = new Card("bleu", "annuler", "UNDO");
+  blue_deck['blue_x2'] = new Card("bleu", "x2", "X2");
+  blue_deck['blue_pause'] = new Card("bleu", "pause", "STOP");
 
-  blue_north.reaction(blueRobot.tabCard, 0);
 
-  red_pause.reaction(redRobot.tabCard, 0);
+
+  red_deck['red_north'] = new Card("rouge", "nord", "N");
+  red_deck['red_east'] = new Card("rouge", "est", "E");
+  red_deck['red_south'] = new Card("rouge", "sud", "S");
+  red_deck['red_west'] = new Card("rouge", "ouest", "W");
+  red_deck['red_east_x2'] = new Card("rouge", "est-x2", "EX2");
+  red_deck['red_take'] = new Card("rouge", "prendre", "TAKE");
+  red_deck['red_put'] = new Card("rouge", "deposer", "PUT");
+  red_deck['red_repulse'] = new Card("rouge", "repousser", "REP");
+  red_deck['red_undo'] = new Card("rouge", "annuler", "UNDO");
+  red_deck['red_x2'] = new Card("rouge", "x2", "X2");
+  red_deck['red_pause'] = new Card("rouge", "pause", "STOP");
+
+  blue_deck['blue_north'].reaction(blueRobot.tabCard, 0);
+
+  red_deck['red_pause'].reaction(redRobot.tabCard, 0);
 
   console.log(blueRobot.tabCard);
   console.log(redRobot.tabCard);
