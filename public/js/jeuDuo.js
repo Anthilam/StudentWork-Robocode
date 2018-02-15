@@ -1,10 +1,12 @@
 // A class representing a robot
 class Robot {
-  constructor() {
+  constructor(c, h) {
+    this.color = c;
     this.row = 0;
     this.cell = 0;
     this.html = "";
     this.tabCard = [];
+    this.heading = h;
   }
 
   setPos(offsetTop, offsetLeft) {
@@ -12,9 +14,52 @@ class Robot {
     this.html.style.left = offsetLeft + "px";
   }
 
-  useCards() {
-    // Do something with tabCard
-    console.log(this.tabCard);
+  rotate(head, dir, color) {
+    var div;
+    if (color == "blue") {
+      div = document.getElementById("blueRobotBody");
+    }
+    else {
+      div = document.getElementById("redRobotBody");
+    }
+
+    var angle;
+    switch (head) {
+      case "N": angle = -90; break;
+      case "E": angle = 0; break;
+      case "S": angle = 90; break;
+      case "W": angle = 180; break;
+      default:;
+    }
+
+    div.style.transform = "rotate("+angle+"deg)";
+  }
+
+  useCard(n) {
+    /* TODO GERER LES COLLISIONS ET SORTIE DE TERRAIN */
+    
+    console.log("Call: useCard("+this.tabCard[n]+")");
+
+    var anim = "";
+
+    switch (this.tabCard[n]) {
+      case "N": this.row -= 1; anim = "north"; this.heading = "N"; break;
+      case "E": this.cell += 1; anim = "east"; this.heading = "E"; break;
+      case "S": this.row += 1; anim = "south"; this.heading = "S"; break;
+      case "W": this.cell -= 1; anim = "west"; this.heading = "W"; break;
+      case "WX2": this.cell -= 2; break;
+      case "EX2": this.cell += 2; break;
+      case "TAKE": take(); break;
+      case "PUT": put(); break;
+      case "REP": repulse(); break;
+      case "UNDO": undo(); break;
+      case "X2": x2(); break;
+      case "STOP": stop(); break;
+      default:;
+    }
+
+    this.rotate(this.heading, this.tabCard[n], this.color);
+    this.html.setAttribute("class", anim);
   }
 }
 
@@ -46,8 +91,8 @@ class Card {
 }
 
 // Global vars
-var blueRobot = new Robot();
-var redRobot = new Robot();
+var blueRobot = new Robot("blue", "W");
+var redRobot = new Robot("red", "E");
 // A table containing the flags
 var tabFlag = [];
 // A boolean table representing which cell of the board is occupied or not
@@ -148,6 +193,9 @@ function init() {
   // redRobot generation
   redRobot.html = document.createElement("div");
   redRobot.html.setAttribute("id", "redRobot");
+  var body = document.createElement("div");
+  body.setAttribute("id", "redRobotBody");
+  redRobot.html.appendChild(body);
   board_container.appendChild(redRobot.html);
   r = randInt(4);
   superSwitch(redRobot, r, 3, 0, 1, true);
@@ -155,6 +203,9 @@ function init() {
   // blueRobot generation
   blueRobot.html = document.createElement("div");
   blueRobot.html.setAttribute("id", "blueRobot");
+  body = document.createElement("div");
+  body.setAttribute("id", "blueRobotBody");
+  blueRobot.html.appendChild(body);
   board_container.appendChild(blueRobot.html);
   r = randInt(4);
   superSwitch(blueRobot, r, 3, 8, 7, true);
@@ -217,6 +268,17 @@ function show_deck(string){
   document.getElementById("img_deck").innerHTML = html;
 }
 
+function useCards(i, b) {
+  if (b) {
+    blueRobot.useCard(i);
+  }
+  else {
+    redRobot.useCard(i);
+  }
+
+  return !b;
+}
+
 function main() {
   console.log("--MAIN--");
 
@@ -245,16 +307,47 @@ function main() {
   var red_pause = new Card("rouge", "pause", "STOP");
 
   blue_north.reaction(blueRobot.tabCard, 0);
+  blue_west.reaction(blueRobot.tabCard, 1);
+  blue_west.reaction(blueRobot.tabCard, 2);
+  blue_west.reaction(blueRobot.tabCard, 3);
+  blue_south.reaction(blueRobot.tabCard, 4);
+  blue_east.reaction(blueRobot.tabCard, 5);
 
-  red_pause.reaction(redRobot.tabCard, 0);
+  red_north.reaction(redRobot.tabCard, 0);
+  red_east.reaction(redRobot.tabCard, 1);
+  red_east.reaction(redRobot.tabCard, 2);
+  red_east.reaction(redRobot.tabCard, 3);
+  red_south.reaction(redRobot.tabCard, 4);
+  red_west.reaction(redRobot.tabCard, 5);
 
-  console.log(blueRobot.tabCard);
-  console.log(redRobot.tabCard);
+  var i = 0;
+  var alt = true;
+  var int = setInterval(function(){
+    alt = useCards(i , alt);
+    if (alt) {
+      ++i;
+    }
+
+    if (i >= 5) {
+      clearInterval(int);
+    }
+  }, 2000);
 }
 
 window.addEventListener("resize", refreshPos);
 
 document.addEventListener("DOMContentLoaded", function(e) {
   init();
+
+  document.getElementById("blueRobot").addEventListener("animationend", function() {
+    document.getElementById("blueRobot").removeAttribute("class");
+    refreshPos();
+  });
+
+  document.getElementById("redRobot").addEventListener("animationend", function() {
+    document.getElementById("redRobot").removeAttribute("class");
+    refreshPos();
+  });
+
   main();
 });
