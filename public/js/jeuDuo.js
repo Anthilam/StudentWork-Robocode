@@ -35,6 +35,40 @@ class Robot {
     div.style.transform = "rotate("+angle+"deg)";
   }
 
+  move(dir) {
+    console.log("Call: move("+dir+")");
+
+    if (dir == "N") {
+      if (this.row - 1 >= 0) {
+        this.row -= 1;
+        this.heading = "N";
+        return "north";
+      }
+    }
+    else if (dir == "E") {
+      if (this.cell + 1 <= 8) {
+        this.cell += 1;
+        this.heading = "E";
+        return "east";
+      }
+    }
+    else if (dir == "S") {
+      if (this.row + 1 <= 8) {
+        this.row += 1;
+        this.heading = "S";
+        return "south";
+      }
+    }
+    else if (dir == "W") {
+      if (this.cell - 1 >= 0) {
+        this.cell -= 1;
+        this.heading = "W";
+        return "west";
+      }
+    }
+    return "";
+  }
+
   useCard(n) {
     /* TODO GERER LES COLLISIONS ET SORTIE DE TERRAIN */
 
@@ -43,10 +77,10 @@ class Robot {
     var anim = "";
 
     switch (this.tabCard[n]) {
-      case "N": this.row -= 1; anim = "north"; this.heading = "N"; break;
-      case "E": this.cell += 1; anim = "east"; this.heading = "E"; break;
-      case "S": this.row += 1; anim = "south"; this.heading = "S"; break;
-      case "W": this.cell -= 1; anim = "west"; this.heading = "W"; break;
+      case "N": anim = this.move("N"); break;
+      case "E": anim = this.move("E"); break;
+      case "S": anim = this.move("S"); break;
+      case "W": anim = this.move("W"); break;
       case "WX2": this.cell -= 2; break;
       case "EX2": this.cell += 2; break;
       case "TAKE": take(); break;
@@ -279,7 +313,6 @@ function show_deck(deck,id){
   document.getElementById("img_deck").innerHTML = html;
 }
 
-
 function print_deck(deck,temporary_hand){
   var html="";
   for(var i in deck){
@@ -380,7 +413,7 @@ function main() {
     }
 
     if (i >= 5) {
-      clearInterval(int);
+      i = 0;
     }
   }, 2000);
 }
