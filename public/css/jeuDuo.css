@@ -1,4 +1,4 @@
-/*--RESET CSS-------------------------------------------------------------------
+/*---RESET CSS------------------------------------------------------------------
   http://meyerweb.com/eric/tools/css/reset/
   v2.0 | 20110126
   License: none (public domain)
@@ -45,7 +45,7 @@ table {
 	border-spacing: 0;
 }
 
-/*----------------------------------------------------------------------------*/
+/*---GENERAL------------------------------------------------------------------*/
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #F8F8FF;
@@ -58,34 +58,36 @@ h1 {
 }
 
 h3 {
-    display: block;
-    font-size: 1.17em;
-    margin-top: 1em;
-    margin-bottom: 1em;
-    margin-left: 0;
-    margin-right: 0;
-    font-weight: bold;
+  font-weight: bold;
 }
 
-#red_deck li, #blue_deck li {
-	position: relative;
-	z-index: 10;
+/*---TITLE--------------------------------------------------------------------*/
+#title {
+	width: 40%;
+	height: 5vw;
+	margin: 2% auto 5% auto;
+	border: 2px solid #6c6c6c;
+	border-radius: 10px;
+	background-image:linear-gradient(to right,#db6641, #418cdb);
 }
 
-#main {
-  position: relative;
-  margin-top: 2%;
-  left: 15%;
-  width: 80%;
-  height: 100%;
+#title > h1 {
+	text-align: center;
+	line-height: 5vw;
+	color: #FFFFFF;
+	font-size: 2vw;
+}
+
+/*---BOARD--------------------------------------------------------------------*/
+#middle {
+	text-align: center;
 }
 
 #board_container {
+	position: relative;
+	display: inline-block;
   width: 75vh;
   height: 75vh;
-  position: relative;
-  float: left;
-  margin: auto;
 }
 
 #board {
@@ -112,6 +114,76 @@ h3 {
 	background-color: #9dffa4;
 }
 
+/*---DECKS--------------------------------------------------------------------*/
+#red_deck li, #blue_deck li {
+	position: relative;
+}
+
+#red_deck, #blue_deck {
+	position: relative;
+	display: inline-block;
+	vertical-align: top;
+  border-radius: 10px;
+  width: 10%;
+}
+
+#red_deck {
+	border: 2px solid #a33614;
+  background-color: #db6641;
+}
+
+#blue_deck {
+	border: 2px solid #1449a3;
+  background-color: #418cdb;
+}
+
+.text_card {
+	position: absolute;
+	top: 40%;
+	font-size: 2vw;
+	left: 4.2vw;
+	color: #F8F8FF;
+}
+
+.red_card, .blue_card {
+  height: 100%;
+  width: 45%;
+  margin: 15% auto 5% auto;
+}
+
+#deck {
+	position: absolute;
+	z-index: 10;
+	width: 40vw;
+	height: 36vw;
+	left: calc(50vw - 20vw);
+	margin-top: 1%;
+	display: none;
+}
+
+#deck h3 {
+	text-align: center;
+	color: #FFFFFF;
+	margin: 3%;
+}
+
+.show_deck {
+	margin: 1vw;
+	width: 20%;
+}
+
+#cross {
+	position:absolute;
+	right: 1%;
+	top: 1%;
+	color: white;
+	font-size: 20pt;
+}
+
+.text_card:hover, #cross:hover, .red_card:hover, .blue_card:hover {
+	cursor:pointer;
+}
+
 /*----------------------------------------------------------------------------*/
 #blueRobot, #redRobot, .blueFlag, .redFlag {
 	position: absolute;
@@ -127,7 +199,8 @@ h3 {
 }
 
 #redRobotBody, #blueRobotBody {
-	position: relative;
+	position: absolute;
+	z-index: 2;
 	width: inherit;
 	height: inherit;
 	background-size: calc(75vh / 11) auto;
@@ -143,6 +216,18 @@ h3 {
 #blueRobotBody {
 	background-image: url('../images/robot-corps-bleu.png');
 	transform: rotate(180deg);
+}
+
+#blueRobotTracks, #redRobotTracks {
+	position: absolute;
+	z-index: 1;
+	width: inherit;
+	height: inherit;
+	background-image: url('../images/robot-chenilles.png');
+	background-size: calc(75vh / 12) calc(75vh / 12);
+	background-repeat: no-repeat;
+	background-position: center;
+	transition: all 1s ease-in-out;
 }
 
 .north {
@@ -163,6 +248,11 @@ h3 {
 .west {
 	animation-duration: 1s;
 	animation-name: anim_west;
+}
+
+.idle {
+	animation-duration: 1s;
+	animation-name: anim_idle;
 }
 
 @keyframes anim_north {
@@ -201,7 +291,18 @@ h3 {
 	}
 }
 
-/*----------------------------------------------------------------------------*/
+@keyframes anim_idle {
+	0% {
+		filter: brightness(100%);
+	}
+	50% {
+		filter: brightness(120%);
+	}
+	100% {
+		filter: brightness(100%);
+	}
+}
+
 .blueFlag {
 	background-image: url('../images/flag-blue.png');
 }
@@ -210,110 +311,8 @@ h3 {
 	background-image: url('../images/flag-red.png');
 }
 
-#red_deck, #blue_deck {
-  margin-top: 2%;
-  border: 2px solid;
-  border-radius: 10px;
-  float: left;
-  width: 10%;
-}
-
-#red_deck {
-	border: 2px solid #a33614;
-  background-color: #db6641;
-  margin-right: 2vh;
-}
-
-#blue_deck {
-	border: 2px solid #1449a3;
-  background-color: #418cdb;
-  margin-left: 2vh;
-}
-
-.text_card {
-	position: absolute;
-	color: black;
-	z-index: 3;
-	top: 40%;
-	font-size: 2vw;
-	left: 3.7vw;
-	color: #F8F8FF;
-	opacity: 0.9;
-}
-
-.red_card, .blue_card {
-  height: 100%;
-  width: 45%;
-  margin-left: 30%;
-  margin-top: 15%;
-  margin-bottom: 5%;
-	z-index: 2;
-}
-
-#title {
-	width: 40%;
-	height: 5vw;
-	margin-left: 13%;
-	vertical-align: middle;
-	margin-bottom: 1%;
-	border: 2px solid #6c6c6c;
-	border-radius: 10px;
-	background-image:linear-gradient(to right,#db6641, #418cdb);
-}
-
-#title > h1 {
-	text-align: center;
-	line-height: 5vw;
-	color: white;
-	font-size: 1.5vw;
-}
-
-#deck {
-	position: absolute;
-	z-index: 10;
-	width: 38vw;
-	height: 32vw;
-	left: 8vw;
-	top: 8vw;
-	display: none;
-}
-
 /*----------------------------------------------------------------------------*/
-#deck h3 {
-	margin-left: 40%;
-	margin-bottom: 2%;
-	color: white;
-}
-
-#img_deck {
-	margin-top: 2vw;
-}
-
-.show_deck {
-	margin-bottom: 1.5vw;
-	margin-left: 2vw;
-	width: 15%;
-}
-
-#cross {
-	position:absolute;
-	left: 95%;
-	top: 1%;
-	color: white;
-	font-size: 20pt;
-}
-
-.text_card:hover, #cross:hover, .red_card:hover, .blue_card:hover {
-	cursor:pointer;
-}
-
 @media (min-width: 0px) and (max-width: 1024px) {
-	#board_container{
-	  width: 45vw;
-	  height: 45vw;
-	}
-
-	/*--------------------------------------------------------------------------*/
 	#blueRobot, #redRobot, .blueFlag, .redFlag {
 		position: absolute;
 		height: calc(45vw / 9);
@@ -330,6 +329,10 @@ h3 {
 
 	#blueRobotBody {
 		background-size: calc(45vw / 11) auto;
+	}
+
+	#blueRobotTracks, #redRobotTracks {
+		background-size: calc(45vw / 12) calc(45vw / 12);
 	}
 
 	@keyframes anim_north {
@@ -369,19 +372,12 @@ h3 {
 	}
 
 	/*--------------------------------------------------------------------------*/
-	#title {
-		margin-left: 20%;
+	#board_container{
+		width: 45vw;
+		height: 45vw;
 	}
 
-	#deck {
-		left: 15vw;
-	}
-
-	#deck h3 {
-		font-size: 2vw;
-	}
-
-	#cross {
+	#deck h3, #cross {
 		font-size: 2vw;
 	}
 }
