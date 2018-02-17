@@ -79,7 +79,6 @@ h3 {
 }
 
 /*---BOARD--------------------------------------------------------------------*/
-
 #board td {
   height: calc(100% / 9);
   background-color: #e6e6e6;
@@ -116,7 +115,6 @@ h3 {
 }
 
 /*---DECKS--------------------------------------------------------------------*/
-
 #red_deck li, #blue_deck li {
 	position: relative;
 }
@@ -169,29 +167,32 @@ h3 {
 }
 
 #deck{
-	z-index: 9;
-}
-
-/*---LOGO--------------------------------------------------------------------*/
-.list_logo{
-	width: 45%;
-}
-
-#logo{
-	top: 11vw;
 	z-index: 10;
 }
 
-#selection{
+/*---LOGO---------------------------------------------------------------------*/
+.list_logo {
+	width: 45%;
+}
+
+#logo {
+	z-index: 11;
+}
+
+#selection {
+	margin: 0 auto;
 	display: grid;
-	margin-top: 1vw;
+	width: 95%;
 	height: 75%;
-	overflow:scroll;
-	overflow-x:hidden;
-	grid-template-columns: 1fr 1fr;
-	grid-row-gap: 3vw;
-	font-size: 1.2vw;
+	overflow: scroll;
+	overflow-x: hidden;
+	grid-template-columns: 5fr 5fr;
 	align-items: center;
+	color: #FFFFFF;
+}
+
+#selection input {
+ margin: 0 auto;
 }
 
 #deck h3, #logo h3 {
@@ -213,7 +214,6 @@ h3 {
 #blue_logo{
 	background-image: url("../images/block-vide-bleu.png");
 }
-
 
 /*----CROSS-------------------------------------------------------------------*/
 .cross {
@@ -304,6 +304,11 @@ h3 {
 	animation-name: anim_east;
 }
 
+.eastx2 {
+	animation-duration: 1s;
+	animation-name: anim_eastx2;
+}
+
 .south {
 	animation-duration: 1s;
 	animation-name: anim_south;
@@ -312,6 +317,11 @@ h3 {
 .west {
 	animation-duration: 1s;
 	animation-name: anim_west;
+}
+
+.westx2 {
+	animation-duration: 1s;
+	animation-name: anim_westx2;
 }
 
 .idle {
@@ -337,6 +347,15 @@ h3 {
 	}
 }
 
+@keyframes anim_eastx2 {
+	0% {
+		transform: translate(0,0);
+	}
+	100% {
+		transform: translate(calc(calc(75vh / 9) * 2), 0);
+	}
+}
+
 @keyframes anim_south {
 	0% {
 		transform: translate(0,0);
@@ -352,6 +371,15 @@ h3 {
 	}
 	100% {
 		transform: translate(calc(-75vh / 9), 0);
+	}
+}
+
+@keyframes anim_westx2 {
+	0% {
+		transform: translate(0,0);
+	}
+	100% {
+		transform: translate(calc(calc(-75vh / 9) * 2), 0);
 	}
 }
 

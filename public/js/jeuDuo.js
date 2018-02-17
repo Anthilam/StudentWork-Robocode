@@ -1,4 +1,5 @@
 /*---CLASSES------------------------------------------------------------------*/
+
 // A class representing a robot
 class Robot {
   constructor(c, h) {
@@ -78,6 +79,20 @@ class Robot {
         return "west";
       }
     }
+    else if (dir == "WX2") {
+      if (this.cell - 2 >= 0 && tabBoard[this.row][this.cell - 2] != true) {
+        this.cell -= 2;
+        this.heading = "W";
+        return "westx2";
+      }
+    }
+    else if (dir == "EX2") {
+      if (this.cell + 2 <= 8 && tabBoard[this.row][this.cell + 2] != true) {
+        this.cell += 2;
+        this.heading = "E";
+        return "eastx2";
+      }
+    }
     return "idle";
   }
 
@@ -85,28 +100,42 @@ class Robot {
    *  Triggers the effect of a card
    */
   useCard(n) {
-    /* TODO GERER LES COLLISIONS ET SORTIE DE TERRAIN */
-
     console.log("Call: useCard("+this.tabCard[n]+")");
 
     var anim = "";
     switch (this.tabCard[n]) {
-      case "N": anim = this.move("N"); break;
-      case "E": anim = this.move("E"); break;
-      case "S": anim = this.move("S"); break;
-      case "W": anim = this.move("W"); break;
-      case "WX2": this.cell -= 2; break;
-      case "EX2": this.cell += 2; break;
+      case "N":
+        anim = this.move("N");
+        this.rotate(this.heading, this.tabCard[n], this.color);
+        break;
+      case "E":
+        anim = this.move("E");
+        this.rotate(this.heading, this.tabCard[n], this.color);
+        break;
+      case "S":
+        anim = this.move("S");
+        this.rotate(this.heading, this.tabCard[n], this.color);
+        break;
+      case "W":
+        anim = this.move("W");
+        this.rotate(this.heading, this.tabCard[n], this.color);
+        break;
+      case "WX2":
+        anim = this.move("WX2");
+        this.rotate(this.heading, this.tabCard[n], this.color);
+        break;
+      case "EX2":
+        anim = this.move("EX2");
+        this.rotate(this.heading, this.tabCard[n], this.color);
+        break;
       case "TAKE": take(); break;
       case "PUT": put(); break;
       case "REP": repulse(); break;
-      case "UNDO": undo(); break;
-      case "X2": x2(); break;
-      case "STOP": stop(); break;
+      case "UNDO": anim = "idle"; break;
+      case "STOP": anim = "idle"; break;
       default: anim = "idle";
     }
 
-    this.rotate(this.heading, this.tabCard[n], this.color);
     this.html.setAttribute("class", anim);
   }
 }
@@ -132,6 +161,7 @@ class Flag {
 // A class representing a Card
 class Card {
   constructor(color, name, act) {
+    this.color = color;
     this.isUsed = false;
     this.action = act;
     this.html = "../images/"+name+"-"+color+".png";
@@ -141,7 +171,13 @@ class Card {
    *  Adds the card to a table at the index i
    */
   addTo(tabCard, i) {
-    tabCard[i] = this.action;
+    // If X2 copy the previous card
+    if (this.action == "X2") {
+      tabCard[i] = tabCard[i-1];
+    }
+    else {
+      tabCard[i] = this.action;
+    }
   }
 }
 
@@ -228,6 +264,13 @@ function superSwitch(elem, rand, row, cell, other, onside) {
  *  Uses the cards of the two robots alternatively, "blue" specifies which robot
  */
 function useCards(i, blue) {
+  if (blueRobot.tabCard[i] == "UNDO") {
+    undo("blue", i);
+  }
+  else if (redRobot.tabCard[i] == "UNDO") {
+    undo("red", i);
+  }
+
   if (blue) {
     blueRobot.useCard(i);
   }
@@ -238,132 +281,142 @@ function useCards(i, blue) {
   return !blue;
 }
 
+/* undo(color, i):
+ *  Disable a card of the adversary
+ */
+function undo(color, i) {
+  if (color == "blue") {
+    redRobot.tabCard[i] = "STOP";
+  }
+  else if (color == "red") {
+    blueRobot.tabCard[i] = "STOP";
+  }
+}
+
 /* show_deck(deck, id):
  *
  */
-function show_deck(deck,id){
+function show_deck(deck, id){
   close_logo();
+  var html = "";
   deck_ind = id;
-  document.getElementById("deck").style.display = "inline-block";
-  document.getElementById("img_deck").innerHTML = "";
-  var html;
-  console.log(deck);
+
   if (deck == 0) {
     isRed = true;
     html = print_deck(red_deck,temporary_red_hand);
     document.getElementById("deck").style.backgroundColor = "#db6641";
     document.getElementById("deck").style.border = "2px solid #a33614";
-  }else{
+  }
+  else {
     isRed = false;
     html = print_deck(blue_deck,temporary_blue_hand);
     document.getElementById("deck").style.backgroundColor = "#418cdb";
     document.getElementById("deck").style.border = "2px solid #1449a3";
   }
+
   document.getElementById("img_deck").innerHTML = html;
+  document.getElementById("deck").style.display = "inline-block";
 }
 
 /* print_deck(deck, temporary_hand):
- *Print all deck's card which are not used for each team
+ *  Print all deck's card which are not used for each team
  */
-function print_deck(deck,temporary_hand){
-  var html="";
-  for(var i in deck){
-    if(temporary_hand.indexOf(i) == -1){
-        html += '<input type="image" onclick="choose_card(\''+i+'\')" class="show_deck" src="'+deck[i].html+'" alt="'+i+'">';
+function print_deck(deck, temporary_hand) {
+  var html = "";
+  for (var i in deck) {
+    if (temporary_hand.indexOf(i) == -1) {
+      html += '<input type="image" onclick="choose_card(\''+i+'\')" class="show_deck" src="'+deck[i].html+'" alt="'+i+'">';
     }
   }
   return html;
 }
 
 /* choose_card(ind):
- *Fill the temporary hand of one team with the chosen card
+ *  Fill the temporary hand of one team with the chosen card
  */
-function choose_card(ind){
-  var id;
-  var src;
-  var id_text;
-  var action;
-  if(isRed){
+function choose_card(ind) {
+  var id, src, id_text, action;
+  if (isRed) {
     id = "red_"+deck_ind;
     id_text = "red_text_"+deck_ind;
     src = red_deck[ind].html;
     temporary_red_hand[deck_ind] = ind;
-    document.getElementById("img_deck").innerHTML = "";
-    document.getElementById("img_deck").innerHTML = print_deck(red_deck,temporary_red_hand);
-  }else{
+    document.getElementById("img_deck").innerHTML = print_deck(red_deck, temporary_red_hand);
+  }
+  else {
     id = "blue_"+deck_ind;
     id_text = "blue_text_"+deck_ind;
     src = blue_deck[ind].html;
     temporary_blue_hand[deck_ind] = ind;
-    document.getElementById("img_deck").innerHTML = "";
-    document.getElementById("img_deck").innerHTML = print_deck(blue_deck,temporary_blue_hand);
+    document.getElementById("img_deck").innerHTML = print_deck(blue_deck, temporary_blue_hand);
   }
+
   document.getElementById(id).src = src;
   document.getElementById(id_text).style.display = "none";
-
 }
 
 /* close_deck():
- *Close the div wich contain the deck
+ *  Close the div wich contain the deck
  */
-function close_deck(){
+function close_deck() {
   document.getElementById("deck").style.display = "none";
 }
 
-/*open_logo_choice(color)
-*Print all the logo available for the team represented by the player
-*/
-function open_logo_choice(color){
+/* open_logo_choice(color):
+ *  Print all the logo available for the team represented by the player
+ */
+function open_logo_choice(color) {
   close_deck();
-  if(color == 0){
+  if (color == 0) {
     isRed = true;
     document.getElementById("logo").style.backgroundColor = "#db6641";
     document.getElementById("logo").style.border = "2px solid #a33614";
-  }else{
+  }
+  else {
     isRed = false;
     document.getElementById("logo").style.backgroundColor = "#418cdb";
     document.getElementById("logo").style.border = "2px solid #1449a3";
   }
+
   var html = "";
   var div = document.getElementById("selection");
-	//On affiche chaque images avec son nom et une icône de suppression
+	// On affiche chaque images avec son nom et une icône de suppression
 	for (var i = 0; i < localStorage.length; i++) {
 		html += '<p class="nom_img"><b>'+localStorage.key(i)+'</b></p>';
 		html += '<input type="image" class="list_logo" src="'+localStorage.getItem(localStorage.key(i))+'" onclick="open_logo(\''+localStorage.getItem(localStorage.key(i))+'\')">';
 	}
+
 	div.innerHTML = html;
-  document.getElementById("logo").style.display = "block";
+  document.getElementById("logo").style.display = "inline-block";
 }
 
-/*open_logo(src)
-*Draw the chosen logo
-*/
+/* open_logo(src):
+ *  Draw the chosen logo
+ */
 function open_logo(src){
   var logo;
-  if(isRed){
+  if (isRed) {
     logo = document.getElementById("red_logo");
-  }else{
+  }
+  else {
     logo = document.getElementById("blue_logo");
   }
 
   var ctxLogo = logo.getContext("2d");
   ctxLogo.clearRect(0, 0, logo.width, logo.height);
 	var img = new Image();
-    img.onload = function () {
-        ctxLogo.drawImage(img, 10, 10, img.width/2, img.height/5);
-    };
-    img.src = src;
+  img.onload = function () {
+      ctxLogo.drawImage(img, 10, 10, img.width/2, img.height/5);
+  };
+  img.src = src;
 }
 
-/*close_logo()
-*Close the window with the list of logo
-*/
+/* close_logo():
+ *  Close the window with the list of logo
+ */
 function close_logo(){
   document.getElementById("logo").style.display = "none";
 }
-
-
-
 
 /*---MAIN FUNCTIONS-----------------------------------------------------------*/
 
@@ -455,13 +508,14 @@ function init() {
         superSwitch(tabFlag[i], r, 8, 3, 7, false);
       } while (tabBoard[tabFlag[i].row][tabFlag[i].cell] != false);
 
-      tabBoard[tabFlag[i].row][tabFlag[i].cell] = i;
+      tabBoard[tabFlag[i].row][tabFlag[i].cell] = true;
       (i < 6) ? att.value = "redFlag" : att.value = "blueFlag";
     }
 
     tabFlag[i].html.setAttributeNode(att);
     board_container.appendChild(tabFlag[i].html);
   }
+
   //Initialization of the two decks
   blue_deck['blue_north'] = new Card("bleu", "nord", "N");
   blue_deck['blue_east'] = new Card("bleu", "est", "E");
@@ -490,18 +544,24 @@ function init() {
   refreshPos();
 }
 
-/*launcher()
-*Test if two hands are full
-*/
+/* launcher():
+ *  Test if two hands are full
+ */
 function launcher(){
+  var launch = true;
   for(var i = 0; i < 5; i++){
-    if(temporary_red_hand[i] == null || temporary_blue_hand[i] == null){
-      return alert("Les deux \"mains\" doivent être pleines");;
-    }else{
+    if (temporary_red_hand[i] == null || temporary_blue_hand[i] == null) {
+      launch = false;
+      return alert("Les deux \"mains\" doivent être pleines");
+    }
+    else {
       close_deck();
       close_logo();
-      main();
     }
+  }
+
+  if (launch) {
+    main();
   }
 }
 
@@ -511,25 +571,26 @@ function launcher(){
 function main() {
   console.log("--MAIN--");
 
-  blue_deck['blue_north'].addTo(blueRobot.tabCard, 0);
-  blue_deck['blue_west'].addTo(blueRobot.tabCard, 1);
+  blue_deck['blue_west'].addTo(blueRobot.tabCard, 0);
+  blue_deck['blue_north'].addTo(blueRobot.tabCard, 1);
   blue_deck['blue_west'].addTo(blueRobot.tabCard, 2);
-  blue_deck['blue_west'].addTo(blueRobot.tabCard, 3);
+  blue_deck['blue_undo'].addTo(blueRobot.tabCard, 3);
   blue_deck['blue_south'].addTo(blueRobot.tabCard, 4);
-  blue_deck['blue_east'].addTo(blueRobot.tabCard, 5);
+  blue_deck['blue_x2'].addTo(blueRobot.tabCard, 5);
 
-  red_deck['red_north'].addTo(redRobot.tabCard, 0);
-  red_deck['red_east'].addTo(redRobot.tabCard, 1);
-  red_deck['red_east'].addTo(redRobot.tabCard, 2);
+  red_deck['red_undo'].addTo(redRobot.tabCard, 0);
+  red_deck['red_west'].addTo(redRobot.tabCard, 1);
+  red_deck['red_north'].addTo(redRobot.tabCard, 2);
   red_deck['red_east'].addTo(redRobot.tabCard, 3);
-  red_deck['red_south'].addTo(redRobot.tabCard, 4);
+  red_deck['red_x2'].addTo(redRobot.tabCard, 4);
   red_deck['red_west'].addTo(redRobot.tabCard, 5);
 
   var i = 0;
-  var alt = true;
+  var alt = false;
   var int = setInterval(function(){
+    console.log(tabBoard);
     alt = useCards(i , alt);
-    if (alt) {
+    if (!alt) {
       ++i;
     }
 
@@ -557,8 +618,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
     refreshPos();
   });
 
-  /* Main loop */
-  //main();
+  main();
 });
 
 /* Every resize of the window calls refreshPos */
