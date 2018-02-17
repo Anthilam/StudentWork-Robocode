@@ -242,6 +242,7 @@ function useCards(i, blue) {
  *
  */
 function show_deck(deck,id){
+  close_logo();
   deck_ind = id;
   document.getElementById("deck").style.display = "inline-block";
   document.getElementById("img_deck").innerHTML = "";
@@ -262,7 +263,7 @@ function show_deck(deck,id){
 }
 
 /* print_deck(deck, temporary_hand):
- *
+ *Print all deck's card which are not used for each team
  */
 function print_deck(deck,temporary_hand){
   var html="";
@@ -275,7 +276,7 @@ function print_deck(deck,temporary_hand){
 }
 
 /* choose_card(ind):
- *
+ *Fill the temporary hand of one team with the chosen card
  */
 function choose_card(ind){
   var id;
@@ -303,11 +304,66 @@ function choose_card(ind){
 }
 
 /* close_deck():
- *
+ *Close the div wich contain the deck
  */
 function close_deck(){
   document.getElementById("deck").style.display = "none";
 }
+
+/*open_logo_choice(color)
+*Print all the logo available for the team represented by the player
+*/
+function open_logo_choice(color){
+  close_deck();
+  if(color == 0){
+    isRed = true;
+    document.getElementById("logo").style.backgroundColor = "#db6641";
+    document.getElementById("logo").style.border = "2px solid #a33614";
+  }else{
+    isRed = false;
+    document.getElementById("logo").style.backgroundColor = "#418cdb";
+    document.getElementById("logo").style.border = "2px solid #1449a3";
+  }
+  var html = "";
+  var div = document.getElementById("selection");
+	//On affiche chaque images avec son nom et une icône de suppression
+	for (var i = 0; i < localStorage.length; i++) {
+		html += '<p class="nom_img"><b>'+localStorage.key(i)+'</b></p>';
+		html += '<input type="image" class="list_logo" src="'+localStorage.getItem(localStorage.key(i))+'" onclick="open_logo(\''+localStorage.getItem(localStorage.key(i))+'\')">';
+	}
+	div.innerHTML = html;
+  document.getElementById("logo").style.display = "block";
+}
+
+/*open_logo(src)
+*Draw the chosen logo
+*/
+function open_logo(src){
+  var logo;
+  if(isRed){
+    logo = document.getElementById("red_logo");
+  }else{
+    logo = document.getElementById("blue_logo");
+  }
+
+  var ctxLogo = logo.getContext("2d");
+  ctxLogo.clearRect(0, 0, logo.width, logo.height);
+	var img = new Image();
+    img.onload = function () {
+        ctxLogo.drawImage(img, 10, 10, img.width/2, img.height/5);
+    };
+    img.src = src;
+}
+
+/*close_logo()
+*Close the window with the list of logo
+*/
+function close_logo(){
+  document.getElementById("logo").style.display = "none";
+}
+
+
+
 
 /*---MAIN FUNCTIONS-----------------------------------------------------------*/
 
@@ -406,16 +462,7 @@ function init() {
     tabFlag[i].html.setAttributeNode(att);
     board_container.appendChild(tabFlag[i].html);
   }
-
-  refreshPos();
-}
-
-/* main():
- *  Main loop of the game
- */
-function main() {
-  console.log("--MAIN--");
-
+  //Initialization of the two decks
   blue_deck['blue_north'] = new Card("bleu", "nord", "N");
   blue_deck['blue_east'] = new Card("bleu", "est", "E");
   blue_deck['blue_south'] = new Card("bleu", "sud", "S");
@@ -439,6 +486,30 @@ function main() {
   red_deck['red_undo'] = new Card("rouge", "annuler", "UNDO");
   red_deck['red_x2'] = new Card("rouge", "x2", "X2");
   red_deck['red_pause'] = new Card("rouge", "pause", "STOP");
+
+  refreshPos();
+}
+
+/*launcher()
+*Test if two hands are full
+*/
+function launcher(){
+  for(var i = 0; i < 5; i++){
+    if(temporary_red_hand[i] == null || temporary_blue_hand[i] == null){
+      return alert("Les deux \"mains\" doivent être pleines");;
+    }else{
+      close_deck();
+      close_logo();
+      main();
+    }
+  }
+}
+
+/* main():
+ *  Main loop of the game
+ */
+function main() {
+  console.log("--MAIN--");
 
   blue_deck['blue_north'].addTo(blueRobot.tabCard, 0);
   blue_deck['blue_west'].addTo(blueRobot.tabCard, 1);
@@ -487,7 +558,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
   });
 
   /* Main loop */
-  main();
+  //main();
 });
 
 /* Every resize of the window calls refreshPos */

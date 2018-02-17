@@ -65,13 +65,13 @@ h3 {
 #title {
 	width: 40%;
 	height: 5vw;
-	margin: 2% auto 5% auto;
+	margin: 1% auto 2% auto;
 	border: 2px solid #6c6c6c;
 	border-radius: 10px;
 	background-image:linear-gradient(to right,#db6641, #418cdb);
 }
 
-#title > h1 {
+#title > h1{
 	text-align: center;
 	line-height: 5vw;
 	color: #FFFFFF;
@@ -79,22 +79,6 @@ h3 {
 }
 
 /*---BOARD--------------------------------------------------------------------*/
-#middle {
-	text-align: center;
-}
-
-#board_container {
-	position: relative;
-	display: inline-block;
-  width: 75vh;
-  height: 75vh;
-}
-
-#board {
-	position: relative;
-	height: 100%;
-	width: 100%;
-}
 
 #board td {
   height: calc(100% / 9);
@@ -114,9 +98,46 @@ h3 {
 	background-color: #9dffa4;
 }
 
+#middle {
+	text-align: center;
+}
+
+#board_container {
+	position: relative;
+	display: inline-block;
+  width: 75vh;
+  height: 75vh;
+}
+
+#board {
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
 /*---DECKS--------------------------------------------------------------------*/
+
 #red_deck li, #blue_deck li {
 	position: relative;
+}
+
+.show_deck {
+	margin: 1vw;
+	width: 17%;
+}
+
+.text_card {
+	position: absolute;
+	top: 40%;
+	font-size: 2vw;
+	left: 3.5vw;
+	color: #F8F8FF;
+}
+
+.red_card, .blue_card {
+  height: 100%;
+  width: 45%;
+  margin: 15% auto 5% auto;
 }
 
 #red_deck, #blue_deck {
@@ -124,7 +145,8 @@ h3 {
 	display: inline-block;
 	vertical-align: top;
   border-radius: 10px;
-  width: 10%;
+  width: 8%;
+	margin-top: 1.5vw;
 }
 
 #red_deck {
@@ -137,42 +159,64 @@ h3 {
   background-color: #418cdb;
 }
 
-.text_card {
+#deck, #logo {
 	position: absolute;
-	top: 40%;
-	font-size: 2vw;
-	left: 4.2vw;
-	color: #F8F8FF;
-}
-
-.red_card, .blue_card {
-  height: 100%;
-  width: 45%;
-  margin: 15% auto 5% auto;
-}
-
-#deck {
-	position: absolute;
-	z-index: 10;
-	width: 40vw;
-	height: 36vw;
-	left: calc(50vw - 20vw);
+	width: 34vw;
+	height: 34vw;
+	left: calc(50vw - 17vw);
 	margin-top: 1%;
 	display: none;
 }
 
-#deck h3 {
+#deck{
+	z-index: 9;
+}
+
+/*---LOGO--------------------------------------------------------------------*/
+.list_logo{
+	width: 45%;
+}
+
+#logo{
+	top: 11vw;
+	z-index: 10;
+}
+
+#selection{
+	display: grid;
+	margin-top: 1vw;
+	height: 75%;
+	overflow:scroll;
+	overflow-x:hidden;
+	grid-template-columns: 1fr 1fr;
+	grid-row-gap: 3vw;
+	font-size: 1.2vw;
+	align-items: center;
+}
+
+#deck h3, #logo h3 {
 	text-align: center;
 	color: #FFFFFF;
 	margin: 3%;
 }
 
-.show_deck {
-	margin: 1vw;
-	width: 20%;
+#red_logo, #blue_logo{
+	height: 4.4vw;
+	background-size: 100%;
+	background-repeat: no-repeat;
 }
 
-#cross {
+#red_logo{
+	background-image: url("../images/block-vide-rouge.png");
+}
+
+#blue_logo{
+	background-image: url("../images/block-vide-bleu.png");
+}
+
+
+/*----CROSS-------------------------------------------------------------------*/
+.cross {
 	position:absolute;
 	right: 1%;
 	top: 1%;
@@ -180,8 +224,28 @@ h3 {
 	font-size: 20pt;
 }
 
-.text_card:hover, #cross:hover, .red_card:hover, .blue_card:hover {
+
+/*----POINTER------------------------------------------------------------------*/
+.text_card:hover, .cross:hover, .red_card:hover, .blue_card:hover, #launcher > h1:hover{
 	cursor:pointer;
+}
+
+
+/*----LAUNCHER----------------------------------------------------------------*/
+#launcher{
+	width: 20%;
+	height: 2vw;
+	margin: 0.5% auto 0% auto;
+	border: 2px solid #6c6c6c;
+	border-radius: 10px;
+	background-image:linear-gradient(to right,#db6641, #418cdb);
+}
+
+#launcher > h1{
+	text-align: center;
+	line-height: 2vw;
+	color: #FFFFFF;
+	font-size: 1.5vw;
 }
 
 /*----------------------------------------------------------------------------*/
@@ -377,7 +441,7 @@ h3 {
 		height: 45vw;
 	}
 
-	#deck h3, #cross {
+	#deck h3, .cross , #logo h3{
 		font-size: 2vw;
 	}
 }
