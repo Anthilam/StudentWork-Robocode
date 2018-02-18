@@ -552,18 +552,44 @@ function launcher(){
   for(var i = 0; i < 5; i++){
     if (temporary_red_hand[i] == null || temporary_blue_hand[i] == null) {
       launch = false;
-      return alert("Les deux \"mains\" doivent être pleines");
+      return alert("Les deux mains doivent être pleines");
     }
     else {
       close_deck();
       close_logo();
     }
   }
-
   if (launch) {
+    console.log("--LAUNCHING--");
     main();
   }
 }
+
+/*disable_onclick_deck
+*Disable onclick on the deck during turn
+*/
+function disable_onclick_deck(){
+  var deck_red = document.getElementsByClassName("red_hand");
+  var deck_blue = document.getElementsByClassName("blue_hand");
+  for (var i=0; i < 5; i++){
+    deck_red[i].removeAttribute("onclick");
+    deck_blue[i].removeAttribute("onclick");
+  }
+}
+
+/*enable_onclick_deck
+*Enable onclick on the deck between turns
+*/
+function enable_onclick_deck(){
+  var deck_red = document.getElementsByClassName("red_hand");
+  var deck_blue = document.getElementsByClassName("blue_hand");
+  for (var i=0; i < 5; i++){
+    deck_red[i].setAttribute('onclick','show_deck(0,'+i+');');
+    deck_blue[i].setAttribute('onclick','show_deck(1,'+i+');');
+  }
+}
+
+
 
 /* main():
  *  Main loop of the game
@@ -593,7 +619,6 @@ function main() {
     if (!alt) {
       ++i;
     }
-
     if (i >= 5) {
       i = 0;
     }
@@ -618,7 +643,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
     refreshPos();
   });
 
-  main();
+  //main();
 });
 
 /* Every resize of the window calls refreshPos */
