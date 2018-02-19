@@ -9,6 +9,9 @@ class Robot {
     this.html = "";
     this.tabCard = [];
     this.heading = h;
+    this.flag = 0;
+    this.take = false;
+    this.put = false;
   }
 
   /* setPos(offsetTop, offsetLeft):
@@ -50,22 +53,30 @@ class Robot {
    *  Moves the robot in a direction
    */
   move(dir) {
+    var adversary;
+    if (this.color == "blue") {
+      adversary = redRobot;
+    }
+    else {
+      adversary = blueRobot;
+    }
+
     tabBoard[this.row][this.cell] = false;
     if (dir == "N") {
-      if (this.row - 1 >= 0 && tabBoard[this.row - 1][this.cell] != true) {
+      if (this.row - 1 >= 0 && (this.row - 1 != adversary.row || this.cell != adversary.cell)) {
         this.row -= 1;
         this.heading = "N";
         return "north";
       }
     }
     else if (dir == "E") {
-      if (this.cell + 1 <= 8 && tabBoard[this.row][this.cell + 1] != true) {
+      if (this.cell + 1 <= 8 && (this.row != adversary.row || this.cell + 1 != adversary.cell)) {
         this.cell += 1;
         this.heading = "E";
         return "east";
       }
     }
-    else if (dir == "S" && tabBoard[this.row + 1][this.cell] != true) {
+    else if (dir == "S" && (this.row + 1 != adversary.row || this.cell != adversary.cell)) {
       if (this.row + 1 <= 8) {
         this.row += 1;
         this.heading = "S";
@@ -73,27 +84,55 @@ class Robot {
       }
     }
     else if (dir == "W") {
-      if (this.cell - 1 >= 0 && tabBoard[this.row][this.cell - 1] != true) {
+      if (this.cell - 1 >= 0 && (this.row != adversary.row || this.cell - 1 != adversary.cell)) {
         this.cell -= 1;
         this.heading = "W";
         return "west";
       }
     }
     else if (dir == "WX2") {
-      if (this.cell - 2 >= 0 && tabBoard[this.row][this.cell - 2] != true) {
+      if (this.cell - 2 >= 0 && (this.row != adversary.row || this.cell - 2 != adversary.cell)) {
         this.cell -= 2;
         this.heading = "W";
         return "westx2";
       }
     }
     else if (dir == "EX2") {
-      if (this.cell + 2 <= 8 && tabBoard[this.row][this.cell + 2] != true) {
+      if (this.cell + 2 <= 8 && (this.row != adversary.row || this.cell + 2 != adversary.cell)) {
         this.cell += 2;
         this.heading = "E";
         return "eastx2";
       }
     }
     return "idle";
+  }
+
+  /* repulse(dir):
+   *  Repulses a robot towards it's base
+   */
+  repulse(dir) {
+    var adversary;
+    if (this.color == "blue") {
+      adversary = redRobot;
+    }
+    else {
+      adversary = blueRobot;
+    }
+
+    if (dir == "REPE") {
+      if (adversary.cell + 1 <= 8 && (this.row != adversary.row || this.cell != adversary.cell + 1)) {
+        adversary.cell += 1;
+        adversary.heading = "E";
+        adversary.html.setAttribute("class", "east");
+      }
+    }
+    else if (dir == "REPW") {
+      if (adversary.cell - 1 >= 0 && (this.row != adversary.row || this.cell != adversary.cell - 1)) {
+        adversary.cell -= 1;
+        adversary.heading = "W";
+        adversary.html.setAttribute("class", "west");
+      }
+    }
   }
 
   /* useCard(n):
@@ -128,9 +167,17 @@ class Robot {
         anim = this.move("EX2");
         this.rotate(this.heading, this.tabCard[n], this.color);
         break;
-      case "TAKE": take(); break;
-      case "PUT": put(); break;
-      case "REP": repulse(); break;
+      case "TAKE": this.take = true; anim = "idle"; break;
+      case "PUT": this.put = true; anim = "idle"; break;
+      case "REP":
+        if (this.color == "blue") {
+          this.repulse("REPW");
+        }
+        else {
+          this.repulse("REPE");
+        }
+        anim = "idle";
+        break;
       case "UNDO": anim = "idle"; break;
       case "STOP": anim = "idle"; break;
       default: anim = "idle";
@@ -147,6 +194,7 @@ class Flag {
     this.cell = 0;
     this.html;
     this.id = id;
+    this.taken = false;
   }
 
   /* setPos(offsetTop, offsetLeft):
@@ -211,19 +259,62 @@ var isRed = true;
 function refreshPos() {
   var board = document.getElementById("board");
 
+  if (redRobot.take) {
+    redRobot.take = false;
+    if (tabBoard[redRobot.row][redRobot.cell] != false) {
+      redRobot.flag = tabBoard[redRobot.row][redRobot.cell];
+      tabFlag[redRobot.flag].isTaken = true;
+    }
+  }
+
+  if (redRobot.put) {
+    redRobot.put = false;
+    if (redRobot.flag != 0 && tabBoard[redRobot.row][redRobot.cell] == false) {
+      tabFlag[redRobot.flag].isTaken = false;
+      redRobot.flag = 0;
+    }
+  }
+
+  if (redRobot.flag != 0) {
+    tabFlag[redRobot.flag].row = redRobot.row;
+    tabFlag[redRobot.flag].cell = redRobot.cell;
+  }
+
   // Refresh of the redRobot
-  tabBoard[redRobot.row][redRobot.cell] = true;
   var cell = board.rows[redRobot.row].cells[redRobot.cell];
   redRobot.setPos(cell.offsetTop, cell.offsetLeft);
 
+  if (blueRobot.take) {
+    blueRobot.take = false;
+    if (tabBoard[blueRobot.row][blueRobot.cell] != false) {
+      blueRobot.flag = tabBoard[blueRobot.row][blueRobot.cell];
+      tabFlag[blueRobot.flag].isTaken = true;
+    }
+  }
+
+  if (blueRobot.put) {
+    blueRobot.put = false;
+    if (blueRobot.flag != 0 && tabBoard[blueRobot.row][blueRobot.cell] == false) {
+      tabFlag[blueRobot.flag].isTaken = false;
+      blueRobot.flag = 0;
+    }
+  }
+
+  if (blueRobot.flag != 0) {
+    tabFlag[blueRobot.flag].row = blueRobot.row;
+    tabFlag[blueRobot.flag].cell = blueRobot.cell;
+  }
+
   // Refresh of the blueRobot
-  tabBoard[blueRobot.row][blueRobot.cell] = true;
   cell = board.rows[blueRobot.row].cells[blueRobot.cell];
   blueRobot.setPos(cell.offsetTop, cell.offsetLeft);
 
   // Refresh of the flags
   for (var i in tabFlag) {
-    tabBoard[tabFlag[i].row][tabFlag[i].cell] = tabFlag[i].id;
+    if (!tabFlag[i].isTaken) {
+      tabBoard[tabFlag[i].row][tabFlag[i].cell] = tabFlag[i].id;
+    }
+
     cell = board.rows[tabFlag[i].row].cells[tabFlag[i].cell];
     tabFlag[i].setPos(cell.offsetTop, cell.offsetLeft);
   }
@@ -484,21 +575,21 @@ function init() {
   superSwitch(blueRobot, r, 3, 8, 7, true);
 
   // Flags generation
-  for (var i = 0; i < 8; ++i) {
+  for (var i = 1; i < 9; ++i) {
     tabFlag[i] = new Flag(i);
     tabFlag[i].html = document.createElement("div");
     att = document.createAttribute("class");
 
     // First base
-    if (i < 4) {
+    if (i <= 4) {
       // Loop until an empty cell is found
       do {
         r = randInt(4);
         superSwitch(tabFlag[i], r, 0, 3, 1, false);
-      } while (tabBoard[tabFlag[i].row][tabFlag[i].cell] == true);
+      } while (tabBoard[tabFlag[i].row][tabFlag[i].cell] != false);
 
-      tabBoard[tabFlag[i].row][tabFlag[i].cell] = true;
-      (i < 2) ? att.value = "redFlag" : att.value = "blueFlag";
+      tabBoard[tabFlag[i].row][tabFlag[i].cell] = i;
+      (i <= 2) ? att.value = "redFlag" : att.value = "blueFlag";
     }
     // Second base
     else {
@@ -508,8 +599,8 @@ function init() {
         superSwitch(tabFlag[i], r, 8, 3, 7, false);
       } while (tabBoard[tabFlag[i].row][tabFlag[i].cell] != false);
 
-      tabBoard[tabFlag[i].row][tabFlag[i].cell] = true;
-      (i < 6) ? att.value = "redFlag" : att.value = "blueFlag";
+      tabBoard[tabFlag[i].row][tabFlag[i].cell] = i;
+      (i <= 6) ? att.value = "redFlag" : att.value = "blueFlag";
     }
 
     tabFlag[i].html.setAttributeNode(att);
@@ -565,9 +656,9 @@ function launcher(){
   }
 }
 
-/*disable_onclick_deck
-*Disable onclick on the deck during turn
-*/
+/* disable_onclick_deck():
+ *  Disable onclick on the deck during turn
+ */
 function disable_onclick_deck(){
   var deck_red = document.getElementsByClassName("red_hand");
   var deck_blue = document.getElementsByClassName("blue_hand");
@@ -577,9 +668,9 @@ function disable_onclick_deck(){
   }
 }
 
-/*enable_onclick_deck
-*Enable onclick on the deck between turns
-*/
+/* enable_onclick_deck():
+ *   Enable onclick on the deck between turns
+ */
 function enable_onclick_deck(){
   var deck_red = document.getElementsByClassName("red_hand");
   var deck_blue = document.getElementsByClassName("blue_hand");
@@ -589,38 +680,27 @@ function enable_onclick_deck(){
   }
 }
 
-
-
 /* main():
  *  Main loop of the game
  */
 function main() {
   console.log("--MAIN--");
 
-  blue_deck['blue_west'].addTo(blueRobot.tabCard, 0);
-  blue_deck['blue_north'].addTo(blueRobot.tabCard, 1);
-  blue_deck['blue_west'].addTo(blueRobot.tabCard, 2);
-  blue_deck['blue_undo'].addTo(blueRobot.tabCard, 3);
-  blue_deck['blue_south'].addTo(blueRobot.tabCard, 4);
-  blue_deck['blue_x2'].addTo(blueRobot.tabCard, 5);
-
-  red_deck['red_undo'].addTo(redRobot.tabCard, 0);
-  red_deck['red_west'].addTo(redRobot.tabCard, 1);
-  red_deck['red_north'].addTo(redRobot.tabCard, 2);
-  red_deck['red_east'].addTo(redRobot.tabCard, 3);
-  red_deck['red_x2'].addTo(redRobot.tabCard, 4);
-  red_deck['red_west'].addTo(redRobot.tabCard, 5);
+  for (var i in temporary_red_hand) {
+    red_deck[temporary_red_hand[i]].addTo(redRobot.tabCard, i);
+    blue_deck[temporary_blue_hand[i]].addTo(blueRobot.tabCard, i);
+  }
 
   var i = 0;
   var alt = false;
   var int = setInterval(function(){
-    console.log(tabBoard);
     alt = useCards(i , alt);
     if (!alt) {
       ++i;
     }
+
     if (i >= 5) {
-      i = 0;
+      clearInterval(int);
     }
   }, 2000);
 }
@@ -642,8 +722,6 @@ document.addEventListener("DOMContentLoaded", function(e) {
     document.getElementById("redRobot").removeAttribute("class");
     refreshPos();
   });
-
-  //main();
 });
 
 /* Every resize of the window calls refreshPos */
