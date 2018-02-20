@@ -215,7 +215,7 @@ h3 {
 	background-image: url("../images/block-vide-bleu.png");
 }
 
-/*----CROSS-------------------------------------------------------------------*/
+/*---CROSS--------------------------------------------------------------------*/
 .cross {
 	position:absolute;
 	right: 1%;
@@ -224,15 +224,13 @@ h3 {
 	font-size: 20pt;
 }
 
-
-/*----POINTER------------------------------------------------------------------*/
-.text_card:hover, .cross:hover, .red_card:hover, .blue_card:hover, #launcher > h1:hover{
+/*---POINTER------------------------------------------------------------------*/
+.text_card:hover, .cross:hover, .red_card:hover, .blue_card:hover, #launcher > h1:hover {
 	cursor:pointer;
 }
 
-
-/*----LAUNCHER----------------------------------------------------------------*/
-#launcher{
+/*---LAUNCHER-----------------------------------------------------------------*/
+#launcher {
 	width: 20%;
 	height: 2vw;
 	margin: 0.5% auto 0% auto;
@@ -241,11 +239,31 @@ h3 {
 	background-image:linear-gradient(to right,#db6641, #418cdb);
 }
 
-#launcher > h1{
+#launcher > h1 {
 	text-align: center;
 	line-height: 2vw;
 	color: #FFFFFF;
 	font-size: 1.5vw;
+}
+
+/*---WIN----------------------------------------------------------------------*/
+#blueWin, #redWin {
+	position: absolute;
+	width: 30vw;
+	height: 10vw;
+	left: calc(50vw - 15vw);
+	display: none;
+	border-radius: 10px;
+}
+
+#blueWin {
+	border: 2px solid #1449a3;
+  background-color: #418cdb;
+}
+
+#redWin {
+	border: 2px solid #a33614;
+	background-color: #db6641;
 }
 
 /*----------------------------------------------------------------------------*/

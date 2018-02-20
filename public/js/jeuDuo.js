@@ -189,7 +189,8 @@ class Robot {
 
 // A class representing a flag
 class Flag {
-  constructor(id) {
+  constructor(id, color) {
+    this.color = color;
     this.row = 0;
     this.cell = 0;
     this.html;
@@ -484,7 +485,7 @@ function open_logo_choice(color) {
 /* open_logo(src):
  *  Draw the chosen logo
  */
-function open_logo(src){
+function open_logo(src) {
   var logo;
   if (isRed) {
     logo = document.getElementById("red_logo");
@@ -505,8 +506,48 @@ function open_logo(src){
 /* close_logo():
  *  Close the window with the list of logo
  */
-function close_logo(){
+function close_logo() {
   document.getElementById("logo").style.display = "none";
+}
+
+/* disable_onclick_deck():
+ *  Disable onclick on the deck during turn
+ */
+function disable_onclick_deck() {
+  var deck_red = document.getElementsByClassName("red_hand");
+  var deck_blue = document.getElementsByClassName("blue_hand");
+  for (var i=0; i < 5; i++){
+    deck_red[i].removeAttribute("onclick");
+    deck_blue[i].removeAttribute("onclick");
+  }
+}
+
+/* enable_onclick_deck():
+ *   Enable onclick on the deck between turns
+ */
+function enable_onclick_deck() {
+  var deck_red = document.getElementsByClassName("red_hand");
+  var deck_blue = document.getElementsByClassName("blue_hand");
+  for (var i=0; i < 5; i++){
+    deck_red[i].setAttribute('onclick','show_deck(0,'+i+');');
+    deck_blue[i].setAttribute('onclick','show_deck(1,'+i+');');
+  }
+}
+
+function printWin(win) {
+  var l = document.getElementById("launcher");
+  l.style.display = "block";
+  l.innerHTML = "<h1>NOUVELLE PARTIE</h1>";
+  l.addEventListener("click", function() {
+    window.location.reload(false);
+  });
+
+  if (win == "WIN_RED") {
+    document.getElementById("title").innerHTML = "<h1>Le robot rouge gagne !</h1>";
+  }
+  else if (win == "WIN_BLUE") {
+    document.getElementById("title").innerHTML = "<h1>Le robot bleu gagne !</h1>";
+  }
 }
 
 /*---MAIN FUNCTIONS-----------------------------------------------------------*/
@@ -589,7 +630,12 @@ function init() {
       } while (tabBoard[tabFlag[i].row][tabFlag[i].cell] != false);
 
       tabBoard[tabFlag[i].row][tabFlag[i].cell] = i;
-      (i <= 2) ? att.value = "redFlag" : att.value = "blueFlag";
+      if (i <= 2) {
+        tabFlag[i].color = "red"; att.value = "redFlag";
+      }
+      else {
+        tabFlag[i].color = "blue"; att.value = "blueFlag";
+      }
     }
     // Second base
     else {
@@ -600,7 +646,12 @@ function init() {
       } while (tabBoard[tabFlag[i].row][tabFlag[i].cell] != false);
 
       tabBoard[tabFlag[i].row][tabFlag[i].cell] = i;
-      (i <= 6) ? att.value = "redFlag" : att.value = "blueFlag";
+      if (i <= 6) {
+        tabFlag[i].color = "red"; att.value = "redFlag";
+      }
+      else {
+        tabFlag[i].color = "blue"; att.value = "blueFlag";
+      }
     }
 
     tabFlag[i].html.setAttributeNode(att);
@@ -638,7 +689,7 @@ function init() {
 /* launcher():
  *  Test if two hands are full
  */
-function launcher(){
+function launcher() {
   var launch = true;
   for(var i = 0; i < 5; i++){
     if (temporary_red_hand[i] == null || temporary_blue_hand[i] == null) {
@@ -652,31 +703,8 @@ function launcher(){
   }
   if (launch) {
     console.log("--LAUNCHING--");
+    document.getElementById("launcher").style.display = "none";
     main();
-  }
-}
-
-/* disable_onclick_deck():
- *  Disable onclick on the deck during turn
- */
-function disable_onclick_deck(){
-  var deck_red = document.getElementsByClassName("red_hand");
-  var deck_blue = document.getElementsByClassName("blue_hand");
-  for (var i=0; i < 5; i++){
-    deck_red[i].removeAttribute("onclick");
-    deck_blue[i].removeAttribute("onclick");
-  }
-}
-
-/* enable_onclick_deck():
- *   Enable onclick on the deck between turns
- */
-function enable_onclick_deck(){
-  var deck_red = document.getElementsByClassName("red_hand");
-  var deck_blue = document.getElementsByClassName("blue_hand");
-  for (var i=0; i < 5; i++){
-    deck_red[i].setAttribute('onclick','show_deck(0,'+i+');');
-    deck_blue[i].setAttribute('onclick','show_deck(1,'+i+');');
   }
 }
 
@@ -686,6 +714,8 @@ function enable_onclick_deck(){
 function main() {
   console.log("--MAIN--");
 
+  document.getElementById("title").innerHTML = "<h1>Tour en cours</h1>";
+
   for (var i in temporary_red_hand) {
     red_deck[temporary_red_hand[i]].addTo(redRobot.tabCard, i);
     blue_deck[temporary_blue_hand[i]].addTo(blueRobot.tabCard, i);
@@ -693,16 +723,50 @@ function main() {
 
   var i = 0;
   var alt = false;
-  var int = setInterval(function(){
-    alt = useCards(i , alt);
-    if (!alt) {
-      ++i;
-    }
-
-    if (i >= 5) {
+  var int = setInterval(function() {
+    var win = checksEnd();
+    if (i >= 5 || win == "WIN_RED" || win == "WIN_BLUE") {
       clearInterval(int);
+
+      if (win == "WIN_RED" || win == "WIN_BLUE") {
+        printWin(win);
+      }
+    }
+    else {
+      alt = useCards(i , alt);
+      if (!alt) {
+        ++i;
+      }
     }
   }, 2000);
+}
+
+/* checkEnd():
+ *  Checks if someone has won the game
+ */
+function checksEnd() {
+  var redwin = [];
+  var bluewin = [];
+  for (var i in tabFlag) {
+    var cell = board.rows[tabFlag[i].row].cells[tabFlag[i].cell];
+    var a = cell.getAttribute("class");
+
+    if (tabFlag[i].color == "red" && a == "redBase") {
+      redwin.push(true);
+    }
+    else if (tabFlag[i].color == "blue" && a == "blueBase") {
+      bluewin.push(true);
+    }
+  }
+
+  if (redwin.length >= 2) {
+    return "WIN_RED";
+  }
+  else if (bluewin.length >= 2) {
+    return "WIN_BLUE";
+  }
+
+  return "NO";
 }
 
 /*---EVENT LISTENERS----------------------------------------------------------*/
@@ -721,6 +785,10 @@ document.addEventListener("DOMContentLoaded", function(e) {
   document.getElementById("redRobot").addEventListener("animationend", function() {
     document.getElementById("redRobot").removeAttribute("class");
     refreshPos();
+  });
+
+  document.getElementById("launcher").addEventListener("click", function() {
+    launcher()
   });
 });
 
