@@ -455,7 +455,7 @@ function close_deck() {
 }
 
 /* open_logo_choice(color):
- *  Print all the logo available for the team represented by the player
+ *  Print all the logo available for the team represented by the color
  */
 function open_logo_choice(color) {
   close_deck();
@@ -472,7 +472,7 @@ function open_logo_choice(color) {
 
   var html = "";
   var div = document.getElementById("selection");
-	// On affiche chaque images avec son nom et une icône de suppression
+
 	for (var i = 0; i < localStorage.length; i++) {
 		html += '<p class="nom_img"><b>'+localStorage.key(i)+'</b></p>';
 		html += '<input type="image" class="list_logo" src="'+localStorage.getItem(localStorage.key(i))+'" onclick="open_logo(\''+localStorage.getItem(localStorage.key(i))+'\')">';
@@ -513,24 +513,30 @@ function close_logo() {
 /* disable_onclick_deck():
  *  Disable onclick on the deck during turn
  */
-function disable_onclick_deck() {
-  var deck_red = document.getElementsByClassName("red_hand");
-  var deck_blue = document.getElementsByClassName("blue_hand");
+function disable_onclick_deck(color) {
+  var hand;
+  if(color == 0){
+      hand = document.getElementsByClassName("red_hand");
+  }else{
+    hand = document.getElementsByClassName("blue_hand");
+  }
   for (var i=0; i < 5; i++){
-    deck_red[i].removeAttribute("onclick");
-    deck_blue[i].removeAttribute("onclick");
+    hand[i].removeAttribute("onclick");
   }
 }
 
-/* enable_onclick_deck():
+/* enable_onclick_deck(color):
  *   Enable onclick on the deck between turns
  */
-function enable_onclick_deck() {
-  var deck_red = document.getElementsByClassName("red_hand");
-  var deck_blue = document.getElementsByClassName("blue_hand");
+function enable_onclick_deck(color) {
+  var hand;
+  if(color == 0){
+      hand = document.getElementsByClassName("red_hand");
+  }else{
+    hand = document.getElementsByClassName("blue_hand");
+  }
   for (var i=0; i < 5; i++){
-    deck_red[i].setAttribute('onclick','show_deck(0,'+i+');');
-    deck_blue[i].setAttribute('onclick','show_deck(1,'+i+');');
+    hand[i].setAttribute('onclick','show_deck('+color+','+i+');');
   }
 }
 
@@ -550,6 +556,53 @@ function printWin(win) {
   }
 }
 
+/*isReady(color)
+* prepare board after a team is ready
+*/
+function isReady(color){
+  var hand, src, tab;
+  var id_text;
+  var launcher = document.getElementById("launcher");
+  var red_ready = document.getElementById("red_ready");
+  var blue_ready = document.getElementById("blue_ready");
+
+  if(color == 0){
+      hand = document.getElementsByClassName("red_card");
+      src="../images/block-vide-rouge.png"
+      id_text = "red_text_";
+      tab =  temporary_red_hand;
+  }else{
+      hand = document.getElementsByClassName("blue_card");
+      src="../images/block-vide-bleu.png"
+      id_text = "blue_text_";
+      tab =  temporary_blue_hand;
+  }
+
+  close_deck();
+  close_logo();
+
+  for(var i = 1; i < 6; i++){
+    hand[i].src = src;
+    document.getElementById(id_text + (i-1)).style.display = "block";
+    if (tab[i-1] == null) {
+      alert("La main doit être pleine");
+      return;
+    }
+  }
+
+  if(color == 0){
+    red_ready.style.display = "none";
+    blue_ready.style.display = "block";
+    document.getElementById("blue_turn").style.display = "block";
+    document.getElementById("red_turn").style.display = "none";
+    disable_onclick_deck(0);
+    enable_onclick_deck(1);
+  }else{
+    blue_ready.style.display = "none";
+    launcher.style.display = "block";
+    disable_onclick_deck(1);
+  }
+}
 /*---MAIN FUNCTIONS-----------------------------------------------------------*/
 
 /* init():
@@ -690,22 +743,11 @@ function init() {
  *  Test if two hands are full
  */
 function launcher() {
-  var launch = true;
-  for(var i = 0; i < 5; i++){
-    if (temporary_red_hand[i] == null || temporary_blue_hand[i] == null) {
-      launch = false;
-      return alert("Les deux mains doivent être pleines");
-    }
-    else {
-      close_deck();
-      close_logo();
-    }
-  }
-  if (launch) {
-    console.log("--LAUNCHING--");
-    document.getElementById("launcher").style.display = "none";
-    main();
-  }
+  close_deck();
+  close_logo();
+  console.log("--LAUNCHING--");
+  document.getElementById("launcher").style.display = "none";
+  main();
 }
 
 /* main():
@@ -727,18 +769,35 @@ function main() {
     var win = checksEnd();
     if (i >= 5 || win == "WIN_RED" || win == "WIN_BLUE") {
       clearInterval(int);
+      enable_onclick_deck(0);
+      document.getElementById("title").innerHTML = "<h1>Choisissez vos mains</h1>";
+      document.getElementById("red_ready").style.display = "block";
+      document.getElementById("blue_turn").style.display = "none";
+      document.getElementById("red_turn").style.display = "block";
 
       if (win == "WIN_RED" || win == "WIN_BLUE") {
         printWin(win);
       }
     }
     else {
+      if(alt){
+        document.getElementById("blue_"+i).src = blue_deck[temporary_blue_hand[i]].html;
+        document.getElementById("blue_text_"+i).style.display = "none";
+        document.getElementById("blue_turn").style.display = "block";
+        document.getElementById("red_turn").style.display = "none";
+      }else{
+        document.getElementById("red_"+i).src = red_deck[temporary_red_hand[i]].html;
+        document.getElementById("red_text_"+i).style.display = "none";
+        document.getElementById("blue_turn").style.display = "none";
+        document.getElementById("red_turn").style.display = "block";
+      }
       alt = useCards(i , alt);
       if (!alt) {
         ++i;
       }
     }
   }, 2000);
+
 }
 
 /* checkEnd():

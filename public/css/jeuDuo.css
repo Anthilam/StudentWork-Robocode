@@ -104,8 +104,8 @@ h3 {
 #board_container {
 	position: relative;
 	display: inline-block;
-  width: 75vh;
-  height: 75vh;
+  width: 35vw;
+  height: 35vw;
 }
 
 #board {
@@ -121,7 +121,7 @@ h3 {
 
 .show_deck {
 	margin: 1vw;
-	width: 17%;
+	width: 15%;
 }
 
 .text_card {
@@ -133,8 +133,7 @@ h3 {
 }
 
 .red_card, .blue_card {
-  height: 100%;
-  width: 45%;
+  width: 3.5vw;
   margin: 15% auto 5% auto;
 }
 
@@ -143,16 +142,16 @@ h3 {
 	display: inline-block;
 	vertical-align: top;
   border-radius: 10px;
-  width: 8%;
+  width: 8vw;
 	margin-top: 1.5vw;
 }
 
-#red_deck {
+#red_deck, #red_ready, #red_turn {
 	border: 2px solid #a33614;
   background-color: #db6641;
 }
 
-#blue_deck {
+#blue_deck, #blue_ready , #blue_turn{
 	border: 2px solid #1449a3;
   background-color: #418cdb;
 }
@@ -160,7 +159,7 @@ h3 {
 #deck, #logo {
 	position: absolute;
 	width: 34vw;
-	height: 34vw;
+	height: 32vw;
 	left: calc(50vw - 17vw);
 	margin-top: 1%;
 	display: none;
@@ -225,25 +224,63 @@ h3 {
 }
 
 /*---POINTER------------------------------------------------------------------*/
-.text_card:hover, .cross:hover, .red_card:hover, .blue_card:hover, #launcher > h1:hover {
+.text_card:hover, .cross:hover, .red_card:hover, .blue_card:hover, #launcher:hover, #red_ready:hover, #blue_ready:hover {
 	cursor:pointer;
 }
 
 /*---LAUNCHER-----------------------------------------------------------------*/
+#buttons{
+	margin-left: 24vw;
+}
+
 #launcher {
 	width: 20%;
+	margin-left: 16vw;
 	height: 2vw;
-	margin: 0.5% auto 0% auto;
 	border: 2px solid #6c6c6c;
 	border-radius: 10px;
 	background-image:linear-gradient(to right,#db6641, #418cdb);
 }
 
-#launcher > h1 {
+#launcher, #blue_ready{
+	display: none;
+}
+
+#red_ready, #blue_ready{
+	width: 8vw;
+}
+
+
+#blue_ready{
+	margin-left: 43.8vw;
+}
+
+#launcher > h1, #red_ready > h1, #blue_ready > h1, #red_turn, #blue_turn {
 	text-align: center;
 	line-height: 2vw;
 	color: #FFFFFF;
 	font-size: 1.5vw;
+}
+
+#red_ready, #blue_ready, #launcher{
+	position: absolute;
+}
+
+/*---TURN---------------------------------------------------------------------*/
+#red_turn, #blue_turn{
+	position: absolute;
+	font-size: 1.2vw;
+	width: 8vw;
+	top: 7vw;
+}
+
+#red_turn{
+	left: 23.7vw;
+}
+
+#blue_turn{
+	left: 67.8vw;
+	display: none;
 }
 
 /*---WIN----------------------------------------------------------------------*/
@@ -266,16 +303,18 @@ h3 {
 	background-color: #db6641;
 }
 
+
+
 /*----------------------------------------------------------------------------*/
 #blueRobot, #redRobot, .blueFlag, .redFlag {
 	position: absolute;
-	height: calc(75vh / 9);
-	width: calc(75vh / 9);
+	height: calc(35vw / 9);
+	width: calc(35vw / 9);
 
 }
 
 .blueFlag, .redFlag {
-	background-size: calc(75vh / 11) auto;
+	background-size: calc(35vw / 11) auto;
 	background-repeat: no-repeat;
 	background-position: center;
 }
@@ -285,7 +324,7 @@ h3 {
 	z-index: 2;
 	width: inherit;
 	height: inherit;
-	background-size: calc(75vh / 11) auto;
+	background-size: calc(35vw / 11) auto;
 	background-repeat: no-repeat;
 	background-position: center;
 	transition: all 1s ease-in-out;
@@ -306,7 +345,7 @@ h3 {
 	width: inherit;
 	height: inherit;
 	background-image: url('../images/robot-chenilles.png');
-	background-size: calc(75vh / 12) calc(75vh / 12);
+	background-size: calc(35vw / 12) calc(35vw / 12);
 	background-repeat: no-repeat;
 	background-position: center;
 	transition: all 1s ease-in-out;
@@ -352,7 +391,7 @@ h3 {
 		transform: translate(0,0);
 	}
 	100% {
-		transform: translate(0, calc(-75vh / 9));
+		transform: translate(0, calc(-35vw / 9));
 	}
 }
 
@@ -361,7 +400,7 @@ h3 {
 		transform: translate(0,0);
 	}
 	100% {
-		transform: translate(calc(75vh / 9), 0);
+		transform: translate(calc(35vw / 9), 0);
 	}
 }
 
@@ -370,7 +409,7 @@ h3 {
 		transform: translate(0,0);
 	}
 	100% {
-		transform: translate(calc(calc(75vh / 9) * 2), 0);
+		transform: translate(calc(calc(35vw / 9) * 2), 0);
 	}
 }
 
@@ -379,7 +418,7 @@ h3 {
 		transform: translate(0,0);
 	}
 	100% {
-		transform: translate(0, calc(75vh / 9));
+		transform: translate(0, calc(35vw / 9));
 	}
 }
 
@@ -388,7 +427,7 @@ h3 {
 		transform: translate(0,0);
 	}
 	100% {
-		transform: translate(calc(-75vh / 9), 0);
+		transform: translate(calc(-35vw / 9), 0);
 	}
 }
 
@@ -397,7 +436,7 @@ h3 {
 		transform: translate(0,0);
 	}
 	100% {
-		transform: translate(calc(calc(-75vh / 9) * 2), 0);
+		transform: translate(calc(calc(-35vw / 9) * 2), 0);
 	}
 }
 
@@ -422,35 +461,36 @@ h3 {
 }
 
 /*----------------------------------------------------------------------------*/
-@media (min-width: 0px) and (max-width: 1024px) {
+@media (min-width: 0px) and (max-width: 1125px) {
 	#blueRobot, #redRobot, .blueFlag, .redFlag {
 		position: absolute;
-		height: calc(45vw / 9);
-		width: calc(45vw / 9);
+		height: calc(35vw / 9);
+		width: calc(35vw / 9);
 	}
 
 	.blueFlag, .redFlag {
-		background-size: calc(45vw / 11) auto;
+		background-size: calc(35vw / 11) auto;
 	}
 
 	#redRobotBody {
-		background-size: calc(45vw / 11) auto;
+		background-size: calc(35vw / 11) auto;
 	}
 
 	#blueRobotBody {
-		background-size: calc(45vw / 11) auto;
+		background-size: calc(35vw / 11) auto;
 	}
 
 	#blueRobotTracks, #redRobotTracks {
-		background-size: calc(45vw / 12) calc(45vw / 12);
+		background-size: calc(35vw / 12) calc(35vw / 12);
 	}
+
 
 	@keyframes anim_north {
 	  0% {
 	    transform: translate(0,0);
 	  }
 	  100% {
-	    transform: translate(0, calc(-45vw / 9));
+	    transform: translate(0, calc(-35vw / 9));
 	  }
 	}
 
@@ -459,7 +499,7 @@ h3 {
 	    transform: translate(0,0);
 	  }
 	  100% {
-	    transform: translate(calc(45vw / 9), 0);
+	    transform: translate(calc(35vw / 9), 0);
 	  }
 	}
 
@@ -468,7 +508,7 @@ h3 {
 			transform: translate(0,0);
 		}
 		100% {
-			transform: translate(0, calc(45vw / 9));
+			transform: translate(0, calc(35vw / 9));
 		}
 	}
 
@@ -477,14 +517,13 @@ h3 {
       transform: translate(0,0);
     }
     100% {
-      transform: translate(calc(-45vw / 9), 0);
+      transform: translate(calc(-35vw / 9), 0);
     }
 	}
-
 	/*--------------------------------------------------------------------------*/
 	#board_container{
-		width: 45vw;
-		height: 45vw;
+		width: 35vw;
+		height: 35vw;
 	}
 
 	#deck h3, .cross , #logo h3{
