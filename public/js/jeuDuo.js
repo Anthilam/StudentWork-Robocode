@@ -246,6 +246,13 @@ var red_deck = [];
 var temporary_blue_hand = [5];
 var temporary_red_hand = [5];
 
+//Var which allow to know if red or blue start
+var round = 0;
+
+//Var which allow is red and blue player are reay
+var redReady = false;
+var blueReady = false;
+
 //Var which represent the index of a chosen card in a deck
 var deck_ind = -1;
 
@@ -556,6 +563,42 @@ function printWin(win) {
   }
 }
 
+/*display_side(color)
+*print the side of the red player
+*/
+function display_side(color){
+  var red_ready = document.getElementById("red_ready");
+  var blue_ready = document.getElementById("blue_ready");
+
+  if(color == 1){
+    red_ready.style.display = "none";
+    blue_ready.style.display = "block";
+    document.getElementById("blue_turn").style.display = "block";
+    document.getElementById("red_turn").style.display = "none";
+    disable_onclick_deck(0);
+    enable_onclick_deck(1);
+  }else{
+    red_ready.style.display = "block";
+    blue_ready.style.display = "none";
+    document.getElementById("blue_turn").style.display = "none";
+    document.getElementById("red_turn").style.display = "block";
+    disable_onclick_deck(1);
+    enable_onclick_deck(0);
+  }
+}
+
+/*hide_both_side()
+*disable all onlick and hide turn sign
+*/
+function hide_both_side(){
+  document.getElementById("blue_turn").style.display = "none";
+  document.getElementById("red_turn").style.display = "none";
+  document.getElementById("red_ready").style.display = "none";
+  document.getElementById("blue_ready").style.display = "none";
+  disable_onclick_deck(0);
+  disable_onclick_deck(1);
+}
+
 /*isReady(color)
 * prepare board after a team is ready
 */
@@ -571,36 +614,40 @@ function isReady(color){
       src="../images/block-vide-rouge.png"
       id_text = "red_text_";
       tab =  temporary_red_hand;
+      redReady = true;
   }else{
       hand = document.getElementsByClassName("blue_card");
       src="../images/block-vide-bleu.png"
       id_text = "blue_text_";
       tab =  temporary_blue_hand;
+      blueReady = true;
   }
 
   close_deck();
   close_logo();
 
   for(var i = 1; i < 6; i++){
-    hand[i].src = src;
-    document.getElementById(id_text + (i-1)).style.display = "block";
     if (tab[i-1] == null) {
       alert("La main doit être pleine");
       return;
     }
+    hand[i].src = src;
+    document.getElementById(id_text + (i-1)).style.display = "block";
   }
 
-  if(color == 0){
-    red_ready.style.display = "none";
-    blue_ready.style.display = "block";
-    document.getElementById("blue_turn").style.display = "block";
-    document.getElementById("red_turn").style.display = "none";
-    disable_onclick_deck(0);
-    enable_onclick_deck(1);
-  }else{
-    blue_ready.style.display = "none";
+  if(redReady && !blueReady){
+    display_side(1);
+  }
+
+  if(!redReady && blueReady){
+    display_side(0);
+  }
+
+  if(redReady && blueReady){
+    redReady = false;
+    blueReady = false;
+    hide_both_side();
     launcher.style.display = "block";
-    disable_onclick_deck(1);
   }
 }
 /*---MAIN FUNCTIONS-----------------------------------------------------------*/
@@ -765,15 +812,20 @@ function main() {
 
   var i = 0;
   var alt = false;
+  var redDone = false;
+  var blueDone = false;
+  if(round%2==0){
+    alt = false;
+  }else{
+    alt = true;
+  }
   var int = setInterval(function() {
     var win = checksEnd();
     if (i >= 5 || win == "WIN_RED" || win == "WIN_BLUE") {
       clearInterval(int);
-      enable_onclick_deck(0);
+      round++;
+      display_side(round%2);
       document.getElementById("title").innerHTML = "<h1>Choisissez vos mains</h1>";
-      document.getElementById("red_ready").style.display = "block";
-      document.getElementById("blue_turn").style.display = "none";
-      document.getElementById("red_turn").style.display = "block";
 
       if (win == "WIN_RED" || win == "WIN_BLUE") {
         printWin(win);
@@ -793,6 +845,13 @@ function main() {
       }
       alt = useCards(i , alt);
       if (!alt) {
+        redDone = true;
+      }else{
+        blueDone = true;
+      }
+      if(redDone && blueDone){
+        redDone = false;
+        blueDone = false;
         ++i;
       }
     }

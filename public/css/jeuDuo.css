@@ -327,7 +327,7 @@ h3 {
 	background-size: calc(35vw / 11) auto;
 	background-repeat: no-repeat;
 	background-position: center;
-	transition: all 1s ease-in-out;
+	transition: transform 1s ease-in-out;
 }
 
 #redRobotBody {
@@ -348,7 +348,7 @@ h3 {
 	background-size: calc(35vw / 12) calc(35vw / 12);
 	background-repeat: no-repeat;
 	background-position: center;
-	transition: all 1s ease-in-out;
+	transition: transform 1s ease-in-out;
 }
 
 .north {
