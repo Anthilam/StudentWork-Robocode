@@ -78,6 +78,14 @@ h3 {
 	font-size: 2vw;
 }
 
+#home{
+	position: absolute;
+	left: 65vw;
+	top: 2.5vw;
+	font-size: 2vw;
+	color: white;
+}
+
 /*---BOARD--------------------------------------------------------------------*/
 #board td {
   height: calc(100% / 9);
@@ -126,9 +134,9 @@ h3 {
 
 .text_card {
 	position: absolute;
-	top: 40%;
+	top: 37%;
 	font-size: 2vw;
-	left: 3.5vw;
+	left: 3.2vw;
 	color: #F8F8FF;
 }
 

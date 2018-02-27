@@ -551,15 +551,18 @@ function printWin(win) {
   var l = document.getElementById("launcher");
   l.style.display = "block";
   l.innerHTML = "<h1>NOUVELLE PARTIE</h1>";
+  disable_onclick_deck(0);
+  disable_onclick_deck(1);
+  hide_both_side();
   l.addEventListener("click", function() {
     window.location.reload(false);
   });
 
   if (win == "WIN_RED") {
-    document.getElementById("title").innerHTML = "<h1>Le robot rouge gagne !</h1>";
+    document.getElementById("subtitle").innerHTML = "Le robot rouge gagne !";
   }
   else if (win == "WIN_BLUE") {
-    document.getElementById("title").innerHTML = "<h1>Le robot bleu gagne !</h1>";
+    document.getElementById("subtitle").innerHTML = "Le robot bleu gagne !";
   }
 }
 
@@ -803,7 +806,7 @@ function launcher() {
 function main() {
   console.log("--MAIN--");
 
-  document.getElementById("title").innerHTML = "<h1>Tour en cours</h1>";
+  document.getElementById("subtitle").innerHTML = "Tour en cours";
 
   for (var i in temporary_red_hand) {
     red_deck[temporary_red_hand[i]].addTo(redRobot.tabCard, i);
@@ -825,8 +828,7 @@ function main() {
       clearInterval(int);
       round++;
       display_side(round%2);
-      document.getElementById("title").innerHTML = "<h1>Choisissez vos mains</h1>";
-
+      document.getElementById("subtitle").innerHTML = "Choisissez vos mains";
       if (win == "WIN_RED" || win == "WIN_BLUE") {
         printWin(win);
       }
