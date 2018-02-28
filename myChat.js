@@ -95,7 +95,20 @@ exports.getMessages = function(u, k, since) {
     };
 }
 
-
+/**
+ *  Création d'une partie par un joueur avec un id
+ *  - Si ce dernier n'existe pas, un message d'information en informe l'utilisateur courant.
+ *  Réponse : 0 OK, -1 accès refusé
+ */
+ exports.createGame = function(from, key, id) {
+     if (!users[from] || users[from].key != key) {
+         console.log("--> [chat] Utilisateur inconnu ou clé incorrecte.");
+         return -1;
+     }
+     addGame(from);
+     alert(games[from]);
+     return 0;
+ }
 
 
 /*** FONCTIONS PRIVEES ***/
@@ -109,6 +122,8 @@ var general = [];
 // pour chaque utilisateur -> tableau de messages reçus en privé
 var users = {};
 
+
+
 /**
  *  Ajout d'un message dans un tableau
  *  @param  tab     tableau dans lequel sera ajouté le message
@@ -120,6 +135,23 @@ function addMessage(tab, msg) {
     }
     tab.push(msg);
 }
+
+
+//tableau des parties disponibles
+var games = [];
+
+/**
+ *  Ajout d'un identifiant de partie dans le tableau
+ *  @param  user     L'identifiant du créateur de la partie
+ *  @param  id      L'identifiant de la partie
+ */
+function addGame(user,id) {
+    while (games.length >= MAX_SIZE) {
+        games.splice(0, 1);
+    }
+    games[user] = id;
+}
+
 
 /**
  *  Renvoie les messages d'un tableau, depuis une certaine date

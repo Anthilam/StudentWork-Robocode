@@ -249,6 +249,9 @@ var temporary_red_hand = [5];
 //Var which allow to know if red or blue start
 var round = 0;
 
+//Check if game is online
+var online = true;
+
 //Var which allow is red and blue player are reay
 var redReady = false;
 var blueReady = false;

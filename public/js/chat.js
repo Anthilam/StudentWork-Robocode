@@ -1,6 +1,15 @@
 // Au déchargement de la page on déconnecte/supprime l'utilisateur
 window.addEventListener("unload", deleteUser());
 
+//Var which contains the id of the game
+var idGame = "";
+
+//Var which allow to see if user has created a game
+var hasAlreadyCreate = false;
+
+//Var which allow to see if user has joined a gameof
+var hasAlreadyJoin = false;
+
 // Fonction de redirection vers la page index
 function redirect() {
   window.location = "../index.html";
@@ -80,15 +89,35 @@ function sendMsg() {
   var user = sessionStorage.getItem("user");
   var key = sessionStorage.getItem("key");
 
+
+  var create = /^\/create/g.exec(message);
+
+  if(create != null && !hasAlreadyJoin && !hasAlreadyCreate){
+    hasAlreadyCreate = true;
+    idGame = "gameof"+user;
+    request.open("POST", "/chat/"+user+"/"+key+"/"+idGame, true);
+  }
+
+  var join = /^\/join/g.exec(message);
+
+  if (join != null && !hasAlreadyJoin && !hasAlreadyCreate){
+    hasAlreadyJoin = false;
+    var to = message.split(/:(.+)/);
+    to = to[1].split(/ (.+)/);
+    //request.open("GET", "/chat/"+user+"/"+key+"/"+to, true);
+  }
+
   // Création de la requête en fonction de la présence de /to: en début de message
   var match = /^\/to:*/g.exec(message);
+
   if (match != null) {
     var to = message.split(/:(.+)/);
     to = to[1].split(/ (.+)/);
     request.open("PUT", "/chat/"+user+"/"+key+"/"+to[0], true);
     message = to[1];
   }
-  else {
+
+  if(match == null && create == null && join == null) {
     request.open("PUT", "/chat/"+user+"/"+key, true);
   }
 

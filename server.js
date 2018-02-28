@@ -11,6 +11,7 @@ var chat = require('./myChat');
 /*
  *  Structure de l'API du chat
  *  POST    /chat/:user                 -->     création de l'utilisateur :user
+ *  POST     /chat/:user/:key/:idGame    -->     post d'une game en attente de l'utilisateur :user avec un id :idGame
  *  DELETE  /chat/:user/:key            -->     suppression d'un utilisateur
  *  GET     /chat/:user/:key/:since     -->     récupération des messages pour l'utilisateur :user depuis :since
  *  PUT     /chat/:user/:key            -->     post d'un message de l'utilisateur :user sur le forum général
@@ -40,6 +41,29 @@ app.post('/chat/:user', function(req, res) {
             res.status(200).json({user: user, key: key});
     }
 });
+
+
+
+/**
+ *  Envoi d'un message à destination de tous
+ *  Réponses :
+ *      utilisateur incorrect   --> 401 + message
+ *      succès                  --> 200
+ */
+app.post('/chat/:user/:key/:idGame', function(req, res) {
+    var from = req.params.user;
+    var key = req.params.key;
+    var id = req.params.idGame;
+    console.log("Reçu création de partie " + from + "(key : " + key + ") id de la partie :" + id);
+    var r = chat.createGame(from, key, id);
+    if (r == 0) {
+        res.status(200).end();
+    }
+    else {
+        res.status(401).end("Utilisateur incorrect");
+    }
+});
+
 
 
 /**
@@ -99,8 +123,9 @@ app.put('/chat/:from/:key/:to', function(req, res) {
 
 
 
+
 /**
- *  Envoi d'un message à destination de tous
+ *  Création d'une partie à destination de tous
  *  Réponses :
  *      utilisateur incorrect   --> 401 + message
  *      succès                  --> 200
