@@ -10,13 +10,15 @@ var chat = require('./myChat');
 
 /*
  *  Structure de l'API du chat
- *  POST    /chat/:user                 -->     création de l'utilisateur :user
- *  POST     /chat/:user/:key/:idGame    -->     post d'une game en attente de l'utilisateur :user avec un id :idGame
- *  DELETE  /chat/:user/:key            -->     suppression d'un utilisateur
- *  GET     /chat/:user/:key/:since     -->     récupération des messages pour l'utilisateur :user depuis :since
- *  PUT     /chat/:user/:key            -->     post d'un message de l'utilisateur :user sur le forum général
- *  PUT     /chat/:user/:key/:to        -->     post d'un message privé de l'utilisateur :user pour l'utilisateur :to
+ *  POST    /chat/:user                            -->     création de l'utilisateur :user
+ *  DELETE  /chat/:user/:key                       -->     suppression d'un utilisateur
+ *  GET     /chat/:user/:key/:since                -->     récupération des messages pour l'utilisateur :user depuis :since
+ *  PUT     /join/:user/:key/:gameCreator/         -->     récupération des informations sur une partie créée par :gameCreator
+ *  PUT     /invite/:user/:key/:to/:idGame         -->     création d'une game et invitation à un autre joueur
+ *  PUT     /chat/:user/:key                       -->     post d'un message de l'utilisateur :user sur le forum général
+ *  PUT     /chat/:user/:key/:to                   -->     post d'un message privé de l'utilisateur :user pour l'utilisateur :to
  */
+
 
 
 /**
@@ -44,25 +46,7 @@ app.post('/chat/:user', function(req, res) {
 
 
 
-/**
- *  Envoi d'un message à destination de tous
- *  Réponses :
- *      utilisateur incorrect   --> 401 + message
- *      succès                  --> 200
- */
-app.post('/chat/:user/:key/:idGame', function(req, res) {
-    var from = req.params.user;
-    var key = req.params.key;
-    var id = req.params.idGame;
-    console.log("Reçu création de partie " + from + "(key : " + key + ") id de la partie :" + id);
-    var r = chat.createGame(from, key, id);
-    if (r == 0) {
-        res.status(200).end();
-    }
-    else {
-        res.status(401).end("Utilisateur incorrect");
-    }
-});
+
 
 
 
@@ -101,6 +85,29 @@ app.get('/chat/:user/:key/:since', function(req, res) {
 
 
 /**
+ *  Récupération d'un message (voir fichier myChat.js pour le format des messages)
+ *  Réponses :
+ *      utilisateur incorrect   --> 401 + message
+ *      succès                  --> 200 + objet { general: [...], user: [...], users: [...] }
+ */
+app.put('/join/:user/:key/:gameCreator', function(req, res) {
+    var user = req.params.user;
+    var key = req.params.key;
+    var to = req.params.gameCreator;
+    var mess = req.body.message;
+    console.log("Reçu acceptation de "+user+" pour la partie de "+to+" Message: "+mess);
+    var p = chat.joinGame(user, to);
+    var r = chat.postMessage(user, key, to, mess);
+    if (p == null || r == null) {
+        res.status(401).end("Utilisateur incorrect");
+    }
+    else {
+        res.status(200).json(mess);
+    }
+});
+
+
+/**
  *  Envoi d'un message à destination d'un utilisateur
  *  Réponses :
  *      utilisateur incorrect   --> 401 + message
@@ -114,6 +121,29 @@ app.put('/chat/:from/:key/:to', function(req, res) {
     console.log("Reçu message de " + from + "(key : " + key + ") pour " + to + " : " + mess);
     var r = chat.postMessage(from, key, to, mess);
     if (r == 0) {
+        res.status(200).end();
+    }
+    else {
+        res.status(401).end("Utilisateur incorrect");
+    }
+});
+
+/**
+ *  Envoi d'une invitation à un utilisateur + création d'une partie
+ *  Réponses :
+ *      utilisateur incorrect   --> 401 + message
+ *      succès                  --> 200
+ */
+app.put('/invite/:user/:key/:to/:idGame', function(req, res) {
+    var from = req.params.user;
+    var key = req.params.key;
+    var to = req.params.to;
+    var id = req.params.idGame;
+    var mess = req.body.message;
+    console.log("[server] Reçu création de partie de " + from + " id de la partie:" + id + " Invitation à : " +to+ "Message: "+mess);
+    var p = chat.createGame(from, id, to);
+    var r = chat.postMessage(from, key, to, mess);
+    if (r == 0 || p == 0) {
         res.status(200).end();
     }
     else {

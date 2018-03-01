@@ -1,14 +1,11 @@
 // Au déchargement de la page on déconnecte/supprime l'utilisateur
 window.addEventListener("unload", deleteUser());
 
-//Var which contains the id of the game
+
+var hasJoined = false;
+var hasCreated = false
+
 var idGame = "";
-
-//Var which allow to see if user has created a game
-var hasAlreadyCreate = false;
-
-//Var which allow to see if user has joined a gameof
-var hasAlreadyJoin = false;
 
 // Fonction de redirection vers la page index
 function redirect() {
@@ -89,27 +86,8 @@ function sendMsg() {
   var user = sessionStorage.getItem("user");
   var key = sessionStorage.getItem("key");
 
-
-  var create = /^\/create/g.exec(message);
-
-  if(create != null && !hasAlreadyJoin && !hasAlreadyCreate){
-    hasAlreadyCreate = true;
-    idGame = "gameof"+user;
-    request.open("POST", "/chat/"+user+"/"+key+"/"+idGame, true);
-  }
-
-  var join = /^\/join/g.exec(message);
-
-  if (join != null && !hasAlreadyJoin && !hasAlreadyCreate){
-    hasAlreadyJoin = false;
-    var to = message.split(/:(.+)/);
-    to = to[1].split(/ (.+)/);
-    //request.open("GET", "/chat/"+user+"/"+key+"/"+to, true);
-  }
-
   // Création de la requête en fonction de la présence de /to: en début de message
   var match = /^\/to:*/g.exec(message);
-
   if (match != null) {
     var to = message.split(/:(.+)/);
     to = to[1].split(/ (.+)/);
@@ -117,7 +95,33 @@ function sendMsg() {
     message = to[1];
   }
 
-  if(match == null && create == null && join == null) {
+  // Création de la requête en fonction de la présence de /invite: en début de message
+  var invite = /^\/invite:*/g.exec(message);
+  if (invite != null && !hasJoined && !hasCreated) {
+    hasCreated = true;
+    var to = message.split(/:(.+)/);
+    to = to[1].split(/ (.+)/);
+    if(to[0] == user){
+      alert("Impossible de s'inviter soit même à une partie !")
+      return;
+    }
+    idGame = "party_of_"+user;
+    request.open("PUT", "/invite/"+user+"/"+key+"/"+to[0]+"/"+idGame, true);
+    message = "Invitation de "+user+" tapez /join:"+user+" pour rejoindre.";
+  }
+
+
+  // Création de la requête en fonction de la présence de /join: en début de message
+  var join = /^\/join:*/g.exec(message);
+  if (join != null && !hasJoined && !hasCreated) {
+    hasJoined = true;
+    var to = message.split(/:(.+)/);
+    to = to[1].split(/ (.+)/);
+    request.open("PUT", "/join/"+user+"/"+key+"/"+to[0], true);
+    message = user+" a accepté de rejoindre votre partie";
+  }
+
+  if(match == null && invite == null && join == null){
     request.open("PUT", "/chat/"+user+"/"+key, true);
   }
 

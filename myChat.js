@@ -4,7 +4,7 @@
  *  -> consultation possible à partir d'un
  *  -> messages privés vers un utilisateur
  */
-
+var online = require('./online');
 
 /**
  *  Créer un utilisateur qui vient de se connecter
@@ -100,16 +100,29 @@ exports.getMessages = function(u, k, since) {
  *  - Si ce dernier n'existe pas, un message d'information en informe l'utilisateur courant.
  *  Réponse : 0 OK, -1 accès refusé
  */
- exports.createGame = function(from, key, id) {
-     if (!users[from] || users[from].key != key) {
+ exports.createGame = function(from, id) {
+     if (!users[from]) {
          console.log("--> [chat] Utilisateur inconnu ou clé incorrecte.");
          return -1;
      }
-     addGame(from);
-     alert(games[from]);
+     online.addGame(id,from);
      return 0;
  }
 
+ /**
+  *  Joindre une partie à partir de l'id d'un joueur
+  *  - Si ce dernier n'existe pas, un message d'information en informe l'utilisateur courant.
+  *  Réponse : 0 OK, -1 accès refusé
+  */
+  exports.joinGame = function(from, to) {
+      if (!users[from]) {
+          console.log("--> [chat] Utilisateur inconnu ou clé incorrecte.");
+          return -1;
+      }
+      var idGame = "party_of_"+to;
+      var ret = online.joinGame(idGame,from);
+      return ret;
+  }
 
 /*** FONCTIONS PRIVEES ***/
 
@@ -136,21 +149,6 @@ function addMessage(tab, msg) {
     tab.push(msg);
 }
 
-
-//tableau des parties disponibles
-var games = [];
-
-/**
- *  Ajout d'un identifiant de partie dans le tableau
- *  @param  user     L'identifiant du créateur de la partie
- *  @param  id      L'identifiant de la partie
- */
-function addGame(user,id) {
-    while (games.length >= MAX_SIZE) {
-        games.splice(0, 1);
-    }
-    games[user] = id;
-}
 
 
 /**
