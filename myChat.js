@@ -95,6 +95,20 @@ exports.getMessages = function(u, k, since) {
     };
 }
 
+
+/**
+ *  Récupération des informations d'une partie.
+ *  Réponse : null -> problème d'authentification de l'utilisateur
+ *
+ */
+exports.getGameInformation = function(u, k, idGame) {
+    if (!users[u] || users[u].key != k) {
+        console.log("--> [chat] Utilisateur inconnu ou clé incorrecte.");
+        return null;
+    }
+    return online.getGame(idGame);
+}
+
 /**
  *  Création d'une partie par un joueur avec un id
  *  - Si ce dernier n'existe pas, un message d'information en informe l'utilisateur courant.
@@ -114,14 +128,19 @@ exports.getMessages = function(u, k, since) {
   *  - Si ce dernier n'existe pas, un message d'information en informe l'utilisateur courant.
   *  Réponse : 0 OK, -1 accès refusé
   */
-  exports.joinGame = function(from, to) {
-      if (!users[from]) {
+  exports.joinGame = function(from, key, to) {
+      if (!users[from] || users[from].key != key) {
           console.log("--> [chat] Utilisateur inconnu ou clé incorrecte.");
           return -1;
       }
       var idGame = "party_of_"+to;
-      var ret = online.joinGame(idGame,from);
-      return ret;
+      if(online.gameAvailable(idGame)){
+        online.joinGame(idGame,from);
+        return 0;
+      }
+      this.postMessage(from,key,from,"Erreur partie impossible à joindre.");
+      return -1;
+
   }
 
 /*** FONCTIONS PRIVEES ***/

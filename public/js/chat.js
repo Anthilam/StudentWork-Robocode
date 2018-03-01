@@ -6,6 +6,8 @@ var hasJoined = false;
 var hasCreated = false
 
 var idGame = "";
+//Var wich contain the name of the host of the game
+var host = "";
 
 // Fonction de redirection vers la page index
 function redirect() {
@@ -50,7 +52,7 @@ function createUser() {
         document.getElementById("newUser").style.display = "none";
         document.getElementById("title").innerHTML += user;
         // Lancement de la fonction de récupération des messages
-        startGetMsg();
+        startGetMessage();
       }
       // Sinon affichage d'un message d'erreur
       else {
@@ -99,6 +101,7 @@ function sendMsg() {
   var invite = /^\/invite:*/g.exec(message);
   if (invite != null && !hasJoined && !hasCreated) {
     hasCreated = true;
+    host = user;
     var to = message.split(/:(.+)/);
     to = to[1].split(/ (.+)/);
     if(to[0] == user){
@@ -117,6 +120,8 @@ function sendMsg() {
     hasJoined = true;
     var to = message.split(/:(.+)/);
     to = to[1].split(/ (.+)/);
+    host = to[0];
+    idGame = "party_of_"+host;
     request.open("PUT", "/join/"+user+"/"+key+"/"+to[0], true);
     message = user+" a accepté de rejoindre votre partie";
   }
@@ -131,8 +136,15 @@ function sendMsg() {
 }
 
 // Fonction lançant la récupération des messages avec un intervalle de 2s
-function startGetMsg() {
+function startGetMessage() {
   window.setInterval(getMsg, 2000);
+  window.setInterval(testGetGame, 2000);
+}
+
+function testGetGame(){
+  if(hasJoined || hasCreated){
+    getGame();
+  }
 }
 
 // Fonction convertissant certains patterns de caractères en emojis
@@ -150,6 +162,35 @@ function emojification(text) {
 
   return txt;
 }
+
+
+function getGame(){
+  var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+  // Récupération des données utilisateur
+  var user = sessionStorage.getItem("user");
+  var key = sessionStorage.getItem("key");
+
+  // Création et envoi de la requête
+
+  request.open("GET", "/game/"+user+"/"+key+"/"+idGame, true);
+  request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  request.send();
+
+  // Récupération et traitement du JSON
+  request.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      // Parsing du JSON
+      var data = this.responseText;
+      //On récupère l'objet GAME
+      console.log(data);
+    }
+  }
+}
+
+
+
+
+
 
 function getMsg() {
   var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");

@@ -48,8 +48,6 @@ app.post('/chat/:user', function(req, res) {
 
 
 
-
-
 /**
  *  Suppression d'un utilisateur existant
  *  Pas de réponse. Opération silencieuse.
@@ -90,13 +88,35 @@ app.get('/chat/:user/:key/:since', function(req, res) {
  *      utilisateur incorrect   --> 401 + message
  *      succès                  --> 200 + objet { general: [...], user: [...], users: [...] }
  */
+app.get('/game/:user/:key/:idGame', function(req, res) {
+    var user = req.params.user;
+    var key = req.params.key;
+    var idGame = req.params.idGame;
+    // console.log("Reçu demande de " + user + "(key : " + key + ") depuis " + since);
+    console.log(idGame);
+    var game = chat.getGameInformation(user, key, idGame);
+    if (game == null) {
+        res.status(401).end("Utilisateur incorrect");
+    }
+    else {
+        res.status(200).json(game);
+    }
+});
+
+
+/**
+ *  Récupération d'un message (voir fichier myChat.js pour le format des messages)
+ *  Réponses :
+ *      utilisateur incorrect   --> 401 + message
+ *      succès                  --> 200 + objet { general: [...], user: [...], users: [...] }
+ */
 app.put('/join/:user/:key/:gameCreator', function(req, res) {
     var user = req.params.user;
     var key = req.params.key;
     var to = req.params.gameCreator;
     var mess = req.body.message;
     console.log("Reçu acceptation de "+user+" pour la partie de "+to+" Message: "+mess);
-    var p = chat.joinGame(user, to);
+    var p = chat.joinGame(user, key, to);
     var r = chat.postMessage(user, key, to, mess);
     if (p == null || r == null) {
         res.status(401).end("Utilisateur incorrect");
@@ -155,7 +175,7 @@ app.put('/invite/:user/:key/:to/:idGame', function(req, res) {
 
 
 /**
- *  Création d'une partie à destination de tous
+ *  Création d'un message à destination de tous
  *  Réponses :
  *      utilisateur incorrect   --> 401 + message
  *      succès                  --> 200
