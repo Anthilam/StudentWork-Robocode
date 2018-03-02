@@ -7,7 +7,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="stylesheet" href="../css/chat.css">
+    <link rel="stylesheet" href="../css/jeuDuo.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <script src="../js/jeuDuo.js"></script>
     <script src="../js/chat.js"></script>
     <title>Robocode - Chat</title>
   </head>
@@ -23,7 +25,7 @@
     </div>
 
     <div id="chat">
-      <h2 id="title">Chat de Robocode - Utilisateur : </h2>
+      <h2 id="title_chat">Chat de Robocode - Utilisateur : </h2>
       <div id="msgArea"></div>
       <div id="usrArea"></div>
       <div id="inputs">
@@ -32,5 +34,63 @@
         <input type="button" value="Retour à l'accueil" onclick="redirect()"></input>
       </div>
     </div>
+
+    <div id="main">
+      <div id="title">
+        <h1 id="subtitle">Début de la partie</h1>
+        <a href="../index.html"><span id="home" class="glyphicon glyphicon-home"></span></a>
+      </div>
+      <div id="middle">
+        <div id="red_turn">Tour rouge</div>
+        <div id="blue_turn">Tour bleu</div>
+        <nav id="red_deck">
+            <ul>
+              <li onclick="open_logo_choice(0)"><canvas class="red_card" id="red_logo"></canvas></li>
+              <li class="red_hand" onclick="show_deck(0,0)"><img class="red_card" id="red_0" alt="red_block" src="../images/block-vide-rouge.png"><div class="text_card" id="red_text_0">1</div></li>
+              <li class="red_hand" onclick="show_deck(0,1)"><img class="red_card" id="red_1" alt="red_block" src="../images/block-vide-rouge.png"><div class="text_card" id="red_text_1">2</div></li>
+              <li class="red_hand" onclick="show_deck(0,2)"><img class="red_card" id="red_2" alt="red_block" src="../images/block-vide-rouge.png"><div class="text_card" id="red_text_2">3</div></li>
+              <li class="red_hand" onclick="show_deck(0,3)"><img class="red_card" id="red_3" alt="red_block" src="../images/block-vide-rouge.png"><div class="text_card" id="red_text_3">4</div></li>
+              <li class="red_hand" onclick="show_deck(0,4)"><img class="red_card" id="red_4" alt="red_block" src="../images/block-vide-rouge.png"><div class="text_card" id="red_text_4">5</div></li>
+            </ul>
+        </nav>
+        <div id="board_container">
+          <table id="board"></table>
+        </div>
+        <nav id="blue_deck">
+            <ul>
+              <li onclick="open_logo_choice()"><canvas class="blue_card" id="blue_logo"></canvas></li>
+              <li class="blue_hand"><img class="blue_card" id="blue_0" alt="blue_block" src="../images/block-vide-bleu.png"><div class="text_card" id="blue_text_0">1</div></li>
+              <li class="blue_hand"><img class="blue_card" id="blue_1" alt="blue_block" src="../images/block-vide-bleu.png"><div class="text_card" id="blue_text_1">2</div></li>
+              <li class="blue_hand"><img class="blue_card" id="blue_2" alt="blue_block" src="../images/block-vide-bleu.png"><div class="text_card" id="blue_text_2">3</div></li>
+              <li class="blue_hand"><img class="blue_card" id="blue_3" alt="blue_block" src="../images/block-vide-bleu.png"><div class="text_card" id="blue_text_3">4</div></li>
+              <li class="blue_hand"><img class="blue_card" id="blue_4" alt="blue_block" src="../images/block-vide-bleu.png"><div class="text_card" id="blue_text_4">5</div></li>
+            </ul>
+        </nav>
+        <div id="logo">
+          <h3>LOGO</h3>
+          <div class="cross" onclick="close_logo()">X</div>
+          <div id="selection"></div>
+        </div>
+        <div id="deck">
+          <h3>DECK</h3>
+          <div class="cross" onclick="close_deck()">X</div>
+          <div id="img_deck"></div>
+        </div>
+      </div>
+      <div id="buttons">
+        <div id="red_ready" onclick="sendDeck()">
+          <h1>READY</h1>
+        </div>
+        <div id="launcher">
+          <h1>LANCER</h1>
+        </div>
+        <div id="blue_ready" onclick="sendDeck()">
+          <h1>READY</h1>
+        </div>
+      </div>
+    </div>
+  </body>
+
+
   </body>
 </html>

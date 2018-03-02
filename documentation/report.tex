@@ -189,7 +189,8 @@
 		\caption{Sequence diagram pt.2}
 		\label{fig:Sequence2}
 	\end{figure}
-
+	The first player send an invitation to the second one, then, ask the server for the creation of a game. The server gives each player a color when they connect to it. Then the game starts. Each player gives its hand to the server. Then, the server displays the game to the two players until one of theim win or disconnect. In that case, the server sends a message to the player which stayed. If a player wins, it sends a message to both players. Also if a player doesn't accept the game the server doesn't launch it.
+\\
 \newpage
 \section{Work process}
 	The work was equally split between us. One of us was in charge of implementing the card selection system and the server modification, when the other was in charge of implementing the progress of the game (the turn, the robot action, \ldots) and making the report. Of course, we also helped each other and worked together when required.\\
@@ -205,6 +206,7 @@
 \newpage
 \section{Conclusion}
 	We managed to make the local multiplayer game without major difficulties, except the management of the animations that was leading to bugs of position of the HTML elements like the robots or the flags.\\
+	Unfortunaly, we didn't succeed in making the online game working. The players can only create or join a game, choose their decks and that's all. Also we didn't succeed in resolving differents problems like ragequit.
 	The project also extended our practice of Javascript, CSS and HTML, and we are now more at ease with those programming languages and the interactions between them.
 
 \end{document}

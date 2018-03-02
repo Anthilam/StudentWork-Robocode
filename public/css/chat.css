@@ -188,3 +188,10 @@ h3 {
 .sick img {
 	margin: -50px 0 0 -50px;
 }
+
+
+
+/*--CSS FOR DISPLAYING THE GAME-----------------------------------------------*/
+#main{
+	display: none;
+}

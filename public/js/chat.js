@@ -1,13 +1,16 @@
 // Au déchargement de la page on déconnecte/supprime l'utilisateur
 window.addEventListener("unload", deleteUser());
 
-
 var hasJoined = false;
 var hasCreated = false
 
 var idGame = "";
 //Var wich contain the name of the host of the game
 var host = "";
+
+online = true;
+
+var IdInterval = 0;
 
 // Fonction de redirection vers la page index
 function redirect() {
@@ -50,7 +53,7 @@ function createUser() {
         // Affichage du chat
         document.getElementById("chat").style.display = "block";
         document.getElementById("newUser").style.display = "none";
-        document.getElementById("title").innerHTML += user;
+        document.getElementById("title_chat").innerHTML += user;
         // Lancement de la fonction de récupération des messages
         startGetMessage();
       }
@@ -100,14 +103,14 @@ function sendMsg() {
   // Création de la requête en fonction de la présence de /invite: en début de message
   var invite = /^\/invite:*/g.exec(message);
   if (invite != null && !hasJoined && !hasCreated) {
-    hasCreated = true;
-    host = user;
     var to = message.split(/:(.+)/);
     to = to[1].split(/ (.+)/);
     if(to[0] == user){
       alert("Impossible de s'inviter soit même à une partie !")
       return;
     }
+    host = user;
+    hasCreated = true;
     idGame = "party_of_"+user;
     request.open("PUT", "/invite/"+user+"/"+key+"/"+to[0]+"/"+idGame, true);
     message = "Invitation de "+user+" tapez /join:"+user+" pour rejoindre.";
@@ -117,35 +120,35 @@ function sendMsg() {
   // Création de la requête en fonction de la présence de /join: en début de message
   var join = /^\/join:*/g.exec(message);
   if (join != null && !hasJoined && !hasCreated) {
-    hasJoined = true;
     var to = message.split(/:(.+)/);
     to = to[1].split(/ (.+)/);
     host = to[0];
     idGame = "party_of_"+host;
     request.open("PUT", "/join/"+user+"/"+key+"/"+to[0], true);
     message = user+" a accepté de rejoindre votre partie";
+    hasJoined = true;
   }
 
   if(match == null && invite == null && join == null){
     request.open("PUT", "/chat/"+user+"/"+key, true);
   }
 
+
   // Envoi de la requête
   request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   request.send("message="+message);
+  if(hasJoined || hasCreated){
+    setTimeout(display_game(), 3000);
+    getGame();
+  }
 }
 
 // Fonction lançant la récupération des messages avec un intervalle de 2s
 function startGetMessage() {
   window.setInterval(getMsg, 2000);
-  window.setInterval(testGetGame, 2000);
 }
 
-function testGetGame(){
-  if(hasJoined || hasCreated){
-    getGame();
-  }
-}
+
 
 // Fonction convertissant certains patterns de caractères en emojis
 function emojification(text) {
@@ -175,21 +178,159 @@ function getGame(){
   request.open("GET", "/game/"+user+"/"+key+"/"+idGame, true);
   request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   request.send();
-
   // Récupération et traitement du JSON
   request.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
       // Parsing du JSON
-      var data = this.responseText;
-      //On récupère l'objet GAME
+      var data = JSON.parse(this.responseText);
       console.log(data);
+      if(data.blueRobot != ''){
+        fill_deck(0,data.redDeck);
+        fill_deck(1,data.blueDeck);
+        fill_robot(JSON.parse(data.blueRobot));
+        fill_robot(JSON.parse(data.redRobot));
+        fill_tab_flag(JSON.parse(data.tabFlag));
+        tabBoard = JSON.parse(data.tabBoard);
+        setTimeout(refreshPos(), 1000);
+      }
+    }
+  }
+  if(temporary_red_hand.length == 5 && temporary_blue_hand.length == 5){
+    window.clearInterval(IdInterval);
+    main();
+  }
+}
+//Fill all the attribute of a robot
+function fill_robot(robot){
+  if(robot.color == "blue"){
+    blueRobot.row = robot.row;
+    blueRobot.cell = robot.cell;
+    blueRobot.heading = robot.heading;
+    blueRobot.flag = robot.flag;
+    blueRobot.put = robot.put;
+    blueRobot.take = robot.take;
+  }else{
+    redRobot.row = robot.row;
+    redRobot.cell = robot.cell;
+    redRobot.heading = robot.heading;
+    redRobot.flag = robot.flag;
+    redRobot.put = robot.put;
+    redRobot.take = robot.take;
+
+  }
+}
+
+//Fill the table of flags
+function fill_tab_flag(tab){
+  for(var i = 1; i < tab.length; i++){
+    tabFlag[i].cell = tab[i].cell;
+    tabFlag[i].color = tab[i].color;
+    tabFlag[i].id = tab[i].id;
+    tabFlag[i].row = tab[i].row;
+    tabFlag[i].isTaken = tab[i].isTaken;
+  }
+}
+
+
+//Fill a deck
+function fill_deck(color, deck){
+  if(deck ==''){
+    return;
+  }
+  for(var i = 0; i < 5; i++){
+    if(color == 0){
+      temporary_red_hand[i] = JSON.parse(deck)[i];
+    }else{
+      temporary_blue_hand[i] = JSON.parse(deck)[i];
     }
   }
 }
 
 
+//Display the game board dependung on
+function display_game(){
+  document.getElementById("main").style.display = "block";
+  init();
+  if(hasJoined){
+    disable_onclick_deck(0);
+    enable_onclick_deck(1);
+    display_side(1);
+  }
+  if(hasCreated){
+    disable_onclick_deck(1);
+    enable_onclick_deck(0);
+    display_side(0);
+    sendInfo();
+  }
+  document.getElementById("red_turn").style.display = "none";
+  document.getElementById("blue_turn").style.display = "none";
+
+}
+
+function sendDeck(){
+  var hand, src, tab;
+  var id_text;
+
+  if(hasCreated){
+      hand = document.getElementsByClassName("red_card");
+      src="../images/block-vide-rouge.png"
+      id_text = "red_text_";
+      tab =  temporary_red_hand;
+  }
+
+  if(hasJoined){
+      hand = document.getElementsByClassName("blue_card");
+      src="../images/block-vide-bleu.png"
+      id_text = "blue_text_";
+      tab =  temporary_blue_hand;
+  }
+
+  close_deck();
+  close_logo();
+
+  for(var i = 1; i < 6; i++){
+    if (tab[i-1] == null) {
+      alert("La main doit être pleine");
+      return;
+    }
+    hand[i].src = src;
+    document.getElementById(id_text + (i-1)).style.display = "block";
+  }
+  var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+
+  if(hasJoined){
+    request.open("PUT", "/tab/"+idGame+"/blue/"+JSON.stringify(tab), true);
+    document.getElementById('blue_ready').style.display = "none";
+    disable_onclick_deck(1);
+  }
+  if(hasCreated){
+    request.open("PUT", "/tab/"+idGame+"/red/"+JSON.stringify(tab), true);
+    document.getElementById('red_ready').style.display = "none";
+    disable_onclick_deck(0);
+  }
+  request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  request.send();
+  startGetGame();
+}
+
+function startGetGame(){
+  IdInterval = window.setInterval(getGame, 2000);
+}
 
 
+/*sendInfo
+*Functio that send robots, flag, board and the decks to the server
+*/
+function sendInfo(){
+  var request = (window.XMLHttpRequest) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+  var blue = JSON.stringify(blueRobot);
+  var red = JSON.stringify(redRobot);
+  var flag = JSON.stringify(tabFlag);
+  var board = JSON.stringify(tabBoard);
+  request.open("PUT", "/info/"+idGame+"/"+blue+"/"+red+"/"+flag+"/"+board, true);
+  request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  request.send();
+}
 
 
 function getMsg() {

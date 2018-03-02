@@ -243,14 +243,14 @@ var tabBoard = [[],[],[],[],[],[],[],[],[]];
 var blue_deck = [];
 var red_deck = [];
 
-var temporary_blue_hand = [5];
-var temporary_red_hand = [5];
+var temporary_blue_hand = [];
+var temporary_red_hand = [];
 
 //Var which allow to know if red or blue start
 var round = 0;
 
 //Check if game is online
-var online = true;
+var online = false;
 
 //Var which allow is red and blue player are reay
 var redReady = false;
@@ -792,6 +792,7 @@ function init() {
   refreshPos();
 }
 
+
 /* launcher():
  *  Test if two hands are full
  */
@@ -829,8 +830,17 @@ function main() {
     var win = checksEnd();
     if (i >= 5 || win == "WIN_RED" || win == "WIN_BLUE") {
       clearInterval(int);
-      round++;
-      display_side(round%2);
+      round
+      if(!online){
+        display_side(round%2);
+      }else if (hasJoined) {
+        enable_onclick_deck(1);
+        document.getElementById('blue_ready').style.display = "block";
+      }else if (hasCreated) {
+          enable_onclick_deck(0);
+          document.getElementById('red_ready').style.display = "block";
+      }
+
       document.getElementById("subtitle").innerHTML = "Choisissez vos mains";
       if (win == "WIN_RED" || win == "WIN_BLUE") {
         printWin(win);
@@ -849,6 +859,11 @@ function main() {
         document.getElementById("red_turn").style.display = "block";
       }
       alt = useCards(i , alt);
+      if(online){
+        refreshPos();
+      }
+      console.log(blueRobot.row);
+      console.log(blueRobot.cell);
       if (!alt) {
         redDone = true;
       }else{
@@ -897,22 +912,29 @@ function checksEnd() {
 /* After the DOMContent is loaded */
 document.addEventListener("DOMContentLoaded", function(e) {
   /* Initialization of the game */
-  init();
+  if(document.getElementById('chat') == null){
+    init();
+  }
 
   /* Call refreshPos() after the animation of a robot */
-  document.getElementById("blueRobot").addEventListener("animationend", function() {
-    document.getElementById("blueRobot").removeAttribute("class");
-    refreshPos();
-  });
+  if(document.getElementById("blueRobot") != null && document.getElementById("redRobot") != null){
+    document.getElementById("blueRobot").addEventListener("animationend", function() {
+      document.getElementById("blueRobot").removeAttribute("class");
+      refreshPos();
+    });
 
-  document.getElementById("redRobot").addEventListener("animationend", function() {
-    document.getElementById("redRobot").removeAttribute("class");
-    refreshPos();
-  });
+    document.getElementById("redRobot").addEventListener("animationend", function() {
+      document.getElementById("redRobot").removeAttribute("class");
+      refreshPos();
+    });
 
-  document.getElementById("launcher").addEventListener("click", function() {
-    launcher()
-  });
+  }
+
+    if(document.getElementById("launcher") != null){
+        document.getElementById("launcher").addEventListener("click", function() {
+        launcher()
+      });
+    }
 });
 
 /* Every resize of the window calls refreshPos */

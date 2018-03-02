@@ -143,6 +143,35 @@ exports.getGameInformation = function(u, k, idGame) {
 
   }
 
+
+  /**
+   *  Envoit une partie initialisée au serveur
+   *  - Si la partie n'existe pas on renvoit null
+   *  Réponse : 0 OK
+   */
+
+  exports.sendInit = function (idGame, blueRobot, redRobot, tabFlag, tabBoard){
+    if(!online.gameExists(idGame)){
+      return null;
+    }
+    online.initGame(idGame, blueRobot, redRobot, tabFlag, tabBoard);
+    return 0;
+  }
+
+  /**
+   *  Ajout d'un deck au serveur
+   *  - Si la partie n'existe pas on renvoit null
+   *  Réponse : 0 OK
+   */
+   exports.addDeck = function(id, color, deck){
+     console.log(id);
+     if(!online.gameExists(id)){
+       return null;
+     }
+     online.addDeck(id, color, deck);
+     return 0;
+   }
+
 /*** FONCTIONS PRIVEES ***/
 
 // taille maximale

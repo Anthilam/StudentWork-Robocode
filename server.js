@@ -11,8 +11,10 @@ var chat = require('./myChat');
 /*
  *  Structure de l'API du chat
  *  POST    /chat/:user                            -->     création de l'utilisateur :user
+ *  PUT    /info/:idGame/:blueRobot/:redRobot/:tabFlag/:tabBoard -> envoit des informations de la partie
  *  DELETE  /chat/:user/:key                       -->     suppression d'un utilisateur
  *  GET     /chat/:user/:key/:since                -->     récupération des messages pour l'utilisateur :user depuis :since
+ *  PUT     /tab/:idGame/:color/:tab                 -->     add the deck if the blue or red player to the game
  *  PUT     /join/:user/:key/:gameCreator/         -->     récupération des informations sur une partie créée par :gameCreator
  *  PUT     /invite/:user/:key/:to/:idGame         -->     création d'une game et invitation à un autre joueur
  *  PUT     /chat/:user/:key                       -->     post d'un message de l'utilisateur :user sur le forum général
@@ -44,6 +46,32 @@ app.post('/chat/:user', function(req, res) {
     }
 });
 
+
+
+
+/**
+ *  Envoi d'informations pour une partie
+ *  Réponses possibles :
+ *      utilisateur invalide        --> 401 + message
+ *      utilisateur déjà utilisé    --> 409 + message
+ *      utilisateur OK et ajouté    --> 200 + {user, key}
+ */
+app.put('/info/:idGame/:blueRobot/:redRobot/:tabFlag/:tabBoard', function(req, res) {
+    var user = req.params.user;
+    var idGame = req.params.idGame;
+    var blueRobot = req.params.blueRobot;
+    var redRobot = req.params.redRobot;
+    var tabFlag = req.params.tabFlag;
+    var tabBoard = req.params.tabBoard;
+    console.log("Envoit des informations de la partie au serveur.")
+    var mess = chat.sendInit(idGame, blueRobot, redRobot, tabFlag, tabBoard);
+    if (mess == null) {
+        res.status(401).end("Partie inexistante");
+    }
+    else {
+        res.status(200).json(mess);
+    }
+});
 
 
 
@@ -122,10 +150,30 @@ app.put('/join/:user/:key/:gameCreator', function(req, res) {
         res.status(401).end("Utilisateur incorrect");
     }
     else {
-        res.status(200).json(mess);
+        res.status(200).json(p);
     }
 });
 
+
+ /**
+  *  Ajout d'un deck d'un des joueurs à la partie
+  *  Réponses :
+  *      partie inexistante      --> 401 + message
+  *      succès                  --> 200 + objet { general: [...], user: [...], users: [...] }
+  */
+ app.put('/tab/:idGame/:color/:tab', function(req, res) {
+     var id = req.params.idGame;
+     var color = req.params.color;
+     var deck = req.params.tab;
+     console.log("Reçu deck du joueur "+color+" pour la partie "+id+" Deck: "+deck);
+     var p = chat.addDeck(id, color, deck);
+     if (p == null) {
+         res.status(401).end("Utilisateur incorrect");
+     }
+     else {
+         res.status(200).json(p);
+     }
+ });
 
 /**
  *  Envoi d'un message à destination d'un utilisateur
