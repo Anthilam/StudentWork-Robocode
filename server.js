@@ -8,6 +8,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 var chat = require('./myChat');
 
+
+/*Timothée Guy Reynald Barbeaut
+*/
+
+
 /*
  *  Structure de l'API du chat
  *  POST    /chat/:user                            -->     création de l'utilisateur :user

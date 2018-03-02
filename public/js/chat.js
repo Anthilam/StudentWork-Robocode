@@ -1,6 +1,11 @@
 // Au déchargement de la page on déconnecte/supprime l'utilisateur
 window.addEventListener("unload", deleteUser());
 
+
+/*Timothée Guy Reynald Barbeaut
+*/
+
+//Boolans which allow to test if player joined or created the game
 var hasJoined = false;
 var hasCreated = false
 
@@ -9,7 +14,7 @@ var idGame = "";
 var host = "";
 
 online = true;
-
+//Id of a set interval
 var IdInterval = 0;
 
 // Fonction de redirection vers la page index

@@ -6,6 +6,9 @@
  */
 var online = require('./online');
 
+/*Timothée Guy Reynald Barbeaut
+*/
+
 /**
  *  Créer un utilisateur qui vient de se connecter
  *  Réponse : 0 OK, -1 nom invalide, -2 existe déjà

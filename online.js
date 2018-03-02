@@ -1,5 +1,9 @@
 var game_tab = new Object();
 
+/*Timothée Guy Reynald Barbeaut
+*/
+
+
 //A class which represent a game
 class Game{
   constructor(id,gameCreator){

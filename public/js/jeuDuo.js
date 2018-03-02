@@ -1,5 +1,8 @@
 /*---CLASSES------------------------------------------------------------------*/
 
+/*Timothée Guy Reynald Barbeaut
+*/
+
 // A class representing a robot
 class Robot {
   constructor(c, h) {
